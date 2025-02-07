@@ -1,3 +1,4 @@
+import { UserActivity } from 'src/user-activity/entities/user-activity.entity';
 import { UserLoginLocation } from 'src/user-login-location/entities/user-login-location.entity';
 import {
   Column,
@@ -20,6 +21,10 @@ export class User {
   @Column() gender: string;
   @Column({ default: true }) active: boolean;
   @CreateDateColumn() createAt: Date;
-  @OneToMany(() => UserLoginLocation, (uLL) => uLL.user)
+
+  @OneToMany(() => UserLoginLocation, (uLL) => uLL.user, { cascade: true })
   userLoginLocations: UserLoginLocation[];
+
+  @OneToMany(() => UserActivity, (activity) => activity.user, { cascade: true })
+  userActivities: UserActivity[];
 }
