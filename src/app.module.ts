@@ -5,9 +5,16 @@ import { DatabaseModule } from './database/database.module';
 import { UserModule } from './user/user.module';
 import { UserLoginLocationModule } from './user-login-location/user-login-location.module';
 import { AuthModule } from './auth/auth.module';
+import { UserActivityModule } from './user-activity/user-activity.module';
 
 @Module({
-  imports: [DatabaseModule, UserModule, UserLoginLocationModule, AuthModule],
+  imports: [
+    DatabaseModule,
+    UserModule,
+    UserLoginLocationModule,
+    AuthModule,
+    UserActivityModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
