@@ -1,4 +1,3 @@
-import { UserLoginLocationService } from './../user-login-location/user-login-location.service';
 import {
   Controller,
   Get,
@@ -8,7 +7,7 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
+import { UsersService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
