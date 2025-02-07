@@ -1,4 +1,4 @@
-import { User } from 'src/users/entities/user.entity';
+import { User } from 'src/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
@@ -18,6 +18,9 @@ export class UserLoginLocation {
   })
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @Column({ type: 'int', name: 'user_id', nullable: true })
+  userId: number;
 
   @CreateDateColumn({ name: 'login_time' })
   loginTime: Date;

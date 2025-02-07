@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm';
 import { UserLoginLocation } from './entities/user-login-location.entity';
 
-export const userLoginLocationProvider = [
+export const userLoginLocationProviders = [
   {
     provide: 'USER_LOGIN_LOCATION_REPOSITORY',
     useFactory: (dataSource: DataSource) =>
