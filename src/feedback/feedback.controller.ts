@@ -10,11 +10,15 @@ import {
 import { FeedbackService } from './feedback.service';
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
 import { UpdateFeedbackDto } from './dto/update-feedback.dto';
+import { Feedback } from './entities/feedback.entity';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @Controller('feedback')
 export class FeedbackController {
   constructor(private readonly feedbackService: FeedbackService) {}
 
+  @ApiOperation({ summary: 'Create new feedback' })
+  @ApiResponse({ status: 201, type: Feedback })
   @Post()
   create(@Body() createFeedbackDto: CreateFeedbackDto) {
     return this.feedbackService.create(createFeedbackDto);
