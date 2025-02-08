@@ -4,7 +4,7 @@ import {
   Column,
   Entity,
   JoinColumn,
-  OneToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -34,12 +34,12 @@ export class Feedback {
   @Column({ name: 'sender_phone', nullable: true })
   senderPhone: string;
 
-  @ApiProperty({ required: false })
-  @Column({ name: 'category_id', nullable: true })
-  category: string;
+  @ApiProperty()
+  @Column({ name: 'category_id' })
+  categoryId: string;
 
   @ApiProperty()
-  @OneToMany(() => FeedbackCategory, (fC) => fC.feedbacks)
+  @ManyToOne(() => FeedbackCategory, (fC) => fC.feedbacks)
   @JoinColumn({ name: 'category_id' })
   feedbackCategory: FeedbackCategory;
 }
