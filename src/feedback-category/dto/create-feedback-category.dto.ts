@@ -6,6 +6,6 @@ export class CreateFeedbackCategoryDto {
   @IsString()
   category: string;
 
-  @ApiProperty({ type: 'boolean' })
+  @ApiProperty({ type: 'boolean', default: true })
   isActive: boolean;
 }

@@ -48,8 +48,8 @@ export class Article {
   @UpdateDateColumn({ name: 'update_at' })
   updateAt: Date;
 
-  @ApiProperty()
-  @Column('boolean', { default: false, name: 'is_active' })
+  @ApiProperty({ type: 'boolean', default: true })
+  @Column('boolean', { default: true, name: 'is_active' })
   isActive: boolean;
 
   @ApiProperty({ type: () => ArticleSubcategory })

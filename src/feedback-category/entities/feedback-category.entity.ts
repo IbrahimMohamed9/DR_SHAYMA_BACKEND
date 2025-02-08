@@ -8,7 +8,7 @@ export class FeedbackCategory {
   @PrimaryColumn({ name: 'category_id' })
   category: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: 'boolean', default: true })
   @Column('boolean', { name: 'is_active', default: true })
   isActive: boolean;
 
