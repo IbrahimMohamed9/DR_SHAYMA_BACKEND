@@ -1,10 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Article } from 'src/article/entities/article.entity';
 import { UserActivity } from 'src/user-activity/entities/user-activity.entity';
 import { UserLoginLocation } from 'src/user-login-location/entities/user-login-location.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -62,4 +65,9 @@ export class User {
   @ApiProperty({ type: () => UserActivity, isArray: true })
   @OneToMany(() => UserActivity, (activity) => activity.user, { cascade: true })
   userActivities: UserActivity[];
+
+  @ApiProperty({ type: () => Article, isArray: true })
+  @ManyToMany(() => Article, (article) => article.reviewers)
+  @JoinTable({ name: 'user_reviewed_articles' })
+  reviewedArticles: Article[];
 }

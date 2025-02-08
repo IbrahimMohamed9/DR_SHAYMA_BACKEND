@@ -10,6 +10,7 @@ import { VolunteerModule } from './volunteer/volunteer.module';
 import { BookModule } from './book/book.module';
 import { FeedbackModule } from './feedback/feedback.module';
 import { FeedbackCategoryModule } from './feedback-category/feedback-category.module';
+import { ArticleModule } from './article/article.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { FeedbackCategoryModule } from './feedback-category/feedback-category.mo
     BookModule,
     FeedbackModule,
     FeedbackCategoryModule,
+    ArticleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
