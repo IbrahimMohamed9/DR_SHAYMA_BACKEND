@@ -22,6 +22,7 @@ export class UserLoginLocation {
   @ApiProperty()
   @Column({ type: 'int', name: 'user_id', nullable: true })
   userId: number;
+
   @ApiProperty()
   @CreateDateColumn({ name: 'login_time' })
   loginTime: Date;

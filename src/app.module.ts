@@ -9,6 +9,7 @@ import { UserActivityModule } from './user-activity/user-activity.module';
 import { VolunteerModule } from './volunteer/volunteer.module';
 import { BookModule } from './book/book.module';
 import { FeedbackModule } from './feedback/feedback.module';
+import { FeedbackCategoryModule } from './feedback-category/feedback-category.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { FeedbackModule } from './feedback/feedback.module';
     VolunteerModule,
     BookModule,
     FeedbackModule,
+    FeedbackCategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

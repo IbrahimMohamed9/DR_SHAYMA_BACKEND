@@ -1,5 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { FeedbackCategory } from 'src/feedback-category/entities/feedback-category.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Feedback {
@@ -16,6 +23,11 @@ export class Feedback {
   title: string;
 
   @ApiProperty()
-  @Column()
+  @Column({ name: 'category_id', nullable: true })
   category: string;
+
+  @ApiProperty()
+  @OneToMany(() => FeedbackCategory, (fC) => fC.feedbacks, { cascade: true })
+  @JoinColumn({ name: 'category_id' })
+  feedbackCategory: FeedbackCategory;
 }
