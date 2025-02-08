@@ -9,4 +9,13 @@ export class CreateFeedbackDto {
 
   @ApiProperty()
   category: string;
+
+  @ApiProperty({ required: false })
+  senderName: string;
+
+  @ApiProperty({ required: false })
+  senderEmail: string;
+
+  @ApiProperty({ required: false })
+  senderPhone: string;
 }

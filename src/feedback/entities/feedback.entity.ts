@@ -23,11 +23,23 @@ export class Feedback {
   title: string;
 
   @ApiProperty()
+  @Column({ name: 'sender_name', nullable: true })
+  senderName: string;
+
+  @ApiProperty()
+  @Column({ name: 'sender_email', nullable: true })
+  senderEmail: string;
+
+  @ApiProperty()
+  @Column({ name: 'sender_phone', nullable: true })
+  senderPhone: string;
+
+  @ApiProperty()
   @Column({ name: 'category_id', nullable: true })
   category: string;
 
   @ApiProperty()
-  @OneToMany(() => FeedbackCategory, (fC) => fC.feedbacks, { cascade: true })
+  @OneToMany(() => FeedbackCategory, (fC) => fC.feedbacks)
   @JoinColumn({ name: 'category_id' })
   feedbackCategory: FeedbackCategory;
 }
