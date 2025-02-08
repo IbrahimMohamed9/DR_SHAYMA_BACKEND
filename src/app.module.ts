@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { UserActivityModule } from './user-activity/user-activity.module';
 import { VolunteerModule } from './volunteer/volunteer.module';
 import { BookModule } from './book/book.module';
+import { FeedbackModule } from './feedback/feedback.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { BookModule } from './book/book.module';
     UserActivityModule,
     VolunteerModule,
     BookModule,
+    FeedbackModule,
   ],
   controllers: [AppController],
   providers: [AppService],
