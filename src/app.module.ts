@@ -12,6 +12,7 @@ import { FeedbackModule } from './feedback/feedback.module';
 import { FeedbackCategoryModule } from './feedback-category/feedback-category.module';
 import { ArticleModule } from './article/article.module';
 import { ArticleCategoryModule } from './article-category/article-category.module';
+import { ArticleSubcategoryModule } from './article-subcategory/article-subcategory.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { ArticleCategoryModule } from './article-category/article-category.modul
     FeedbackCategoryModule,
     ArticleModule,
     ArticleCategoryModule,
+    ArticleSubcategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
