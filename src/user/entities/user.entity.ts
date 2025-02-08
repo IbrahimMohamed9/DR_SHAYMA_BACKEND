@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { UserActivity } from 'src/user-activity/entities/user-activity.entity';
 import { UserLoginLocation } from 'src/user-login-location/entities/user-login-location.entity';
 import {
@@ -10,21 +11,55 @@ import {
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn({ name: 'user_id' }) id: number;
-  @Column({ default: 'user' }) possition: string;
-  @Column() name: string;
-  @Column({ unique: true }) email: string;
-  @Column() password: string;
-  @Column({ nullable: true }) img: string;
-  @Column({ type: 'date' }) dob: Date;
-  @Column({ unique: true }) phone: string;
-  @Column() gender: string;
-  @Column({ default: true }) active: boolean;
-  @CreateDateColumn() createAt: Date;
+  @ApiProperty()
+  @PrimaryGeneratedColumn({ name: 'user_id' })
+  id: number;
 
+  @ApiProperty()
+  @Column({ default: 'user' })
+  possition: string;
+
+  @ApiProperty()
+  @Column()
+  name: string;
+
+  @ApiProperty()
+  @Column({ unique: true })
+  email: string;
+
+  @ApiProperty()
+  @Column()
+  password: string;
+
+  @ApiProperty()
+  @Column({ nullable: true })
+  img: string;
+
+  @ApiProperty()
+  @Column({ type: 'date' })
+  dob: Date;
+
+  @ApiProperty()
+  @Column({ unique: true })
+  phone: string;
+
+  @ApiProperty()
+  @Column()
+  gender: string;
+
+  @ApiProperty()
+  @Column({ default: true })
+  active: boolean;
+
+  @ApiProperty()
+  @CreateDateColumn()
+  createAt: Date;
+
+  @ApiProperty({ type: () => UserLoginLocation })
   @OneToMany(() => UserLoginLocation, (uLL) => uLL.user, { cascade: true })
   userLoginLocations: UserLoginLocation[];
 
+  @ApiProperty({ type: () => UserActivity, isArray: true })
   @OneToMany(() => UserActivity, (activity) => activity.user, { cascade: true })
   userActivities: UserActivity[];
 }

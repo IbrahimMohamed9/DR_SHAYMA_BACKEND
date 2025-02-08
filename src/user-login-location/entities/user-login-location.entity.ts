@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { User } from 'src/user/entities/user.entity';
 import {
   Column,
@@ -10,11 +11,22 @@ import {
 
 @Entity()
 export class UserLoginLocation {
-  @PrimaryGeneratedColumn() id: number;
-  @Column({ name: 'ip_address' }) ipAddress: string;
-  @Column({ type: 'int', name: 'user_id', nullable: true }) userId: number;
-  @CreateDateColumn({ name: 'login_time' }) loginTime: Date;
+  @ApiProperty()
+  @PrimaryGeneratedColumn()
+  id: number;
 
+  @ApiProperty()
+  @Column({ name: 'ip_address' })
+  ipAddress: string;
+
+  @ApiProperty()
+  @Column({ type: 'int', name: 'user_id', nullable: true })
+  userId: number;
+  @ApiProperty()
+  @CreateDateColumn({ name: 'login_time' })
+  loginTime: Date;
+
+  @ApiProperty({ type: () => User })
   @ManyToOne(() => User, (user) => user.userLoginLocations, {
     onDelete: 'CASCADE',
   })

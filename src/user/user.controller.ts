@@ -10,21 +10,29 @@ import {
 import { UsersService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { User } from './entities/user.entity';
 
+@ApiTags('users')
 @Controller('user')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
+  @ApiOperation({ summary: 'Create new user' })
+  @ApiResponse({ status: 201, type: User })
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
+  @ApiOperation({ summary: 'Get all users' })
+  @ApiResponse({ status: 200, type: [User] })
   @Get()
   findAll() {
     return this.usersService.findAll();
   }
 
+  @ApiOperation({ summary: 'Get user by id' })
+  @ApiResponse({ status: 200, type: User })
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);

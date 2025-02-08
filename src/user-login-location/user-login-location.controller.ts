@@ -1,15 +1,7 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { UserLoginLocationService } from './user-login-location.service';
-import { CreateUserLoginLocationDto } from './dto/create-user-login-location.dto';
-import { UpdateUserLoginLocationDto } from './dto/update-user-login-location.dto';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { UserLoginLocation } from './entities/user-login-location.entity';
 
 @Controller('user-login-location')
 export class UserLoginLocationController {
@@ -17,44 +9,31 @@ export class UserLoginLocationController {
     private readonly userLoginLocationService: UserLoginLocationService,
   ) {}
 
-  @Post()
-  create(@Body() createUserLoginLocationDto: CreateUserLoginLocationDto) {
-    return this.userLoginLocationService.create(createUserLoginLocationDto);
-  }
-
   @Get()
+  @ApiOperation({ summary: 'Get user login location without user' })
+  @ApiResponse({ status: 200, type: UserLoginLocation })
   findAll() {
     return this.userLoginLocationService.findAll();
   }
 
   @Get('with-user')
+  @ApiOperation({ summary: 'Get user login location with user' })
+  @ApiResponse({ status: 200, type: UserLoginLocation })
   findAllWithUser() {
     return this.userLoginLocationService.findAllWithUser();
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Get user login location without user by id' })
+  @ApiResponse({ status: 200, type: UserLoginLocation })
   findOne(@Param('id') id: string) {
     return this.userLoginLocationService.findOne(+id);
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Get user login location with user by id' })
+  @ApiResponse({ status: 200, type: UserLoginLocation })
   findOneWithUser(@Param('id') id: string) {
     return this.userLoginLocationService.findOneWithUser(+id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateUserLoginLocationDto: UpdateUserLoginLocationDto,
-  ) {
-    return this.userLoginLocationService.update(
-      +id,
-      updateUserLoginLocationDto,
-    );
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userLoginLocationService.remove(+id);
   }
 }
