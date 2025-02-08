@@ -6,6 +6,7 @@ import { UserModule } from './user/user.module';
 import { UserLoginLocationModule } from './user-login-location/user-login-location.module';
 import { AuthModule } from './auth/auth.module';
 import { UserActivityModule } from './user-activity/user-activity.module';
+import { VolunteerModule } from './volunteer/volunteer.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { UserActivityModule } from './user-activity/user-activity.module';
     UserLoginLocationModule,
     AuthModule,
     UserActivityModule,
+    VolunteerModule,
   ],
   controllers: [AppController],
   providers: [AppService],
