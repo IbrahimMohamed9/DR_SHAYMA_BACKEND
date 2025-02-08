@@ -2,9 +2,13 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsPhoneNumber, IsString, IsUrl } from 'class-validator';
 
 export class CreateVolunteerDto {
-  @ApiProperty({ example: 'Image URL' })
-  @IsString()
-  img: string;
+  @ApiProperty({
+    example:
+      'https://the7eagles.com/wp-content/uploads/2024/05/Parts-of-Image-URL-1.webp',
+    required: false,
+  })
+  @IsUrl()
+  img?: string;
 
   @ApiProperty({ example: '+201110472777' })
   @IsPhoneNumber(null)

@@ -2,32 +2,24 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Volunteer {
+export class Book {
   @ApiProperty()
-  @PrimaryGeneratedColumn({ name: 'volunteer_id' })
+  @PrimaryGeneratedColumn({ name: 'book_id' })
   id: number;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @Column({ nullable: true })
   img?: string;
 
   @ApiProperty()
   @Column()
-  phone: string;
+  title: string;
 
   @ApiProperty()
   @Column()
-  email: string;
+  description: string;
 
   @ApiProperty()
-  @Column()
-  name: string;
-
-  @ApiProperty()
-  @Column()
-  whatsapp: string;
-
-  @ApiProperty()
-  @Column()
-  linkedin: string;
+  @Column({ name: 'download_link' })
+  downloadLink: string;
 }

@@ -7,6 +7,7 @@ import {
   IsOptional,
   IsPhoneNumber,
   IsString,
+  IsUrl,
   MinLength,
 } from 'class-validator';
 
@@ -28,9 +29,13 @@ export class CreateUserDto {
   @MinLength(6)
   password: string;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({
+    example:
+      'https://the7eagles.com/wp-content/uploads/2024/05/Parts-of-Image-URL-1.webp',
+    required: false,
+  })
   @IsOptional()
-  @IsString()
+  @IsUrl()
   img?: string;
 
   @ApiProperty({ type: Date })
@@ -38,7 +43,7 @@ export class CreateUserDto {
   @Type(() => Date)
   dob: Date;
 
-  @ApiProperty()
+  @ApiProperty({ example: '+201110472777' })
   @IsPhoneNumber(null)
   phone: string;
 
