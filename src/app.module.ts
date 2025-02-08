@@ -11,6 +11,7 @@ import { BookModule } from './book/book.module';
 import { FeedbackModule } from './feedback/feedback.module';
 import { FeedbackCategoryModule } from './feedback-category/feedback-category.module';
 import { ArticleModule } from './article/article.module';
+import { ArticleCategoryModule } from './article-category/article-category.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ArticleModule } from './article/article.module';
     FeedbackModule,
     FeedbackCategoryModule,
     ArticleModule,
+    ArticleCategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
