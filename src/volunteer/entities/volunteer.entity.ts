@@ -3,11 +3,11 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Volunteer {
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @PrimaryGeneratedColumn({ name: 'volunteer_id' })
   id: number;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @Column({ nullable: true })
   img?: string;
 

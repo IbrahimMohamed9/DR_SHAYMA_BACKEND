@@ -3,7 +3,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Book {
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @PrimaryGeneratedColumn({ name: 'book_id' })
   id: number;
 

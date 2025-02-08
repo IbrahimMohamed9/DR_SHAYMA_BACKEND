@@ -11,7 +11,7 @@ import {
 
 @Entity()
 export class UserActivity {
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @PrimaryGeneratedColumn({ name: 'user_activity_id' })
   id: number;
 
@@ -23,7 +23,7 @@ export class UserActivity {
   @CreateDateColumn()
   createAt: Date;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @Column({ name: 'user_id', nullable: true, type: 'int' })
   userId: number;
 

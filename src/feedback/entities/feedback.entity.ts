@@ -10,7 +10,7 @@ import {
 
 @Entity()
 export class Feedback {
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @PrimaryGeneratedColumn({ name: 'feedback_id' })
   id: number;
 
@@ -22,19 +22,19 @@ export class Feedback {
   @Column()
   title: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @Column({ name: 'sender_name', nullable: true })
   senderName: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @Column({ name: 'sender_email', nullable: true })
   senderEmail: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @Column({ name: 'sender_phone', nullable: true })
   senderPhone: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @Column({ name: 'category_id', nullable: true })
   category: string;
 

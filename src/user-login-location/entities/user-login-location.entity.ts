@@ -11,7 +11,7 @@ import {
 
 @Entity()
 export class UserLoginLocation {
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -19,7 +19,7 @@ export class UserLoginLocation {
   @Column({ name: 'ip_address' })
   ipAddress: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @Column({ type: 'int', name: 'user_id', nullable: true })
   userId: number;
 

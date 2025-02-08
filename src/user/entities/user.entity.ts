@@ -14,7 +14,7 @@ import {
 
 @Entity()
 export class User {
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @PrimaryGeneratedColumn({ name: 'user_id' })
   id: number;
 
@@ -34,7 +34,7 @@ export class User {
   @Column()
   password: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @Column({ nullable: true })
   img: string;
 
