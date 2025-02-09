@@ -21,7 +21,7 @@ export class User {
 
   @ApiProperty()
   @Column({ default: 'user' })
-  position: string;
+  role: string;
 
   @ApiProperty()
   @Column()

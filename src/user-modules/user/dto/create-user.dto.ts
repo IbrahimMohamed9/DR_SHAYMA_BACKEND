@@ -22,7 +22,7 @@ export class CreateUserDto {
 
   @ApiProperty({ enum: ['admin', 'user'], default: 'user' })
   @IsIn(['admin', 'user'])
-  position?: string;
+  role?: string;
 
   @ApiProperty({ minLength: 6 })
   @IsString()
