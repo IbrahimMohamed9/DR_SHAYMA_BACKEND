@@ -1,8 +1,8 @@
-import { UserLoginLocationService } from './../user-login-location/user-login-location.service';
-import { UsersService } from '../user/user.service';
+import { UserLoginLocationService } from './../user-modules/user-login-location/user-login-location.service';
+import { UsersService } from '../user-modules/user/user.service';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { CreateUserDto } from 'src/user-modules/user/dto/create-user.dto';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
