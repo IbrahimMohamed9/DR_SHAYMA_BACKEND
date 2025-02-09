@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Feedback } from 'src/feedback/entities/feedback.entity';
+import { Feedback } from 'src/feedback-modules/feedback/entities/feedback.entity';
 import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 
 @Entity('feedback_category')

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { FeedbackCategory } from 'src/feedback-category/entities/feedback-category.entity';
+import { FeedbackCategory } from 'src/feedback-modules/feedback-category/entities/feedback-category.entity';
 import {
   Column,
   Entity,
