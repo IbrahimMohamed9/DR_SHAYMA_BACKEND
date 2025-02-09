@@ -7,6 +7,7 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -19,9 +20,11 @@ export class UserActivity {
   @Column()
   activity: string;
 
-  @ApiProperty()
-  @CreateDateColumn()
-  createAt: Date;
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
 
   @ApiProperty({ required: false })
   @Column({ name: 'user_id', nullable: true, type: 'int' })

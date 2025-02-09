@@ -10,6 +10,7 @@ import {
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -20,7 +21,7 @@ export class User {
 
   @ApiProperty()
   @Column({ default: 'user' })
-  possition: string;
+  position: string;
 
   @ApiProperty()
   @Column()
@@ -54,9 +55,11 @@ export class User {
   @Column({ default: true })
   active: boolean;
 
-  @ApiProperty()
-  @CreateDateColumn()
-  createAt: Date;
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
 
   @ApiProperty({ type: () => UserLoginLocation })
   @OneToMany(() => UserLoginLocation, (uLL) => uLL.user, { cascade: true })

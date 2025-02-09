@@ -42,11 +42,11 @@ export class Article {
   @Column({ nullable: true })
   description?: string;
 
-  @CreateDateColumn({ name: 'create_at' })
-  createAt: Date;
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
 
-  @UpdateDateColumn({ name: 'update_at' })
-  updateAt: Date;
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
 
   @ApiProperty({ type: 'boolean', default: true })
   @Column('boolean', { default: true, name: 'is_active' })
