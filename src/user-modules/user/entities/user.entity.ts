@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Article } from 'src/article/entities/article.entity';
-import { UserActivity } from 'src/user-activity/entities/user-activity.entity';
-import { UserLoginLocation } from 'src/user-login-location/entities/user-login-location.entity';
+import { Article } from 'src/article-modules/article/entities/article.entity';
+import { UserActivity } from 'src/user-modules/user-activity/entities/user-activity.entity';
+import { UserLoginLocation } from 'src/user-modules/user-login-location/entities/user-login-location.entity';
 import {
   Column,
   CreateDateColumn,
