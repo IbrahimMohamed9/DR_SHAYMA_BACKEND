@@ -10,9 +10,9 @@ import { VolunteerModule } from './volunteer/volunteer.module';
 import { BookModule } from './book/book.module';
 import { FeedbackModule } from './feedback/feedback.module';
 import { FeedbackCategoryModule } from './feedback-category/feedback-category.module';
-import { ArticleModule } from './article/article.module';
-import { ArticleCategoryModule } from './article-category/article-category.module';
-import { ArticleSubcategoryModule } from './article-subcategory/article-subcategory.module';
+import { ArticleModule } from './article-modules/article/article.module';
+import { ArticleCategoryModule } from './article-modules/article-category/article-category.module';
+import { ArticleSubcategoryModule } from './article-modules/article-subcategory/article-subcategory.module';
 
 @Module({
   imports: [

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ArticleSubcategory } from 'src/article-subcategory/entities/article-subcategory.entity';
+import { ArticleSubcategory } from 'src/article-modules/article-subcategory/entities/article-subcategory.entity';
 import { User } from 'src/user-modules/user/entities/user.entity';
 import {
   Column,
