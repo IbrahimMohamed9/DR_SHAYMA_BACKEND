@@ -6,12 +6,20 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { User } from './entities/user.entity';
+import { OnlyAdminGuard } from 'src/auth/guards/only-admin.guard';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('users')
 @Controller('user')
@@ -26,6 +34,8 @@ export class UsersController {
 
   @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({ status: 200, type: [User] })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @Get()
   findAll() {
     return this.usersService.findAll();

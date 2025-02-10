@@ -13,9 +13,11 @@ import { FeedbackCategoryModule } from './feedback-modules/feedback-category/fee
 import { ArticleModule } from './article-modules/article/article.module';
 import { ArticleCategoryModule } from './article-modules/article-category/article-category.module';
 import { ArticleSubcategoryModule } from './article-modules/article-subcategory/article-subcategory.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     DatabaseModule,
     UserModule,
     UserLoginLocationModule,

@@ -29,7 +29,7 @@ export class AuthService {
     delete user.createdAt;
 
     return {
-      accessToken: this.jwtService.sign({ id: user.id }),
+      accessToken: this.jwtService.sign({ user }),
       user,
     };
   }
