@@ -7,19 +7,20 @@ import { UserLoginLocationModule } from 'src/user-modules/user-login-location/us
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt.strategy';
-import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    ConfigModule,
     DatabaseModule,
     UserModule,
     UserLoginLocationModule,
     PassportModule,
-    JwtModule.register({
-      global: true,
-      secret: 'process.env.JWT_SECRET',
-      signOptions: { expiresIn: '7d' },
+    JwtModule.registerAsync({
+      useFactory: () => {
+        return {
+          secret: process.env.JWT_SECRET,
+          signOptions: { expiresIn: '7d' },
+        };
+      },
     }),
   ],
   controllers: [AuthController],
