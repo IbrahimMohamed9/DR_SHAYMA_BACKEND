@@ -38,7 +38,7 @@ export class CreateUserDto {
   @IsUrl()
   img?: string;
 
-  @ApiProperty({ type: Date })
+  @ApiProperty({ type: Date, example: '1998-12-18' })
   @IsDate()
   @Type(() => Date)
   dob: Date;

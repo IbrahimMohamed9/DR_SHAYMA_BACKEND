@@ -39,7 +39,7 @@ export class User {
   @Column({ nullable: true })
   img: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: () => Date, example: '2000-01-01' })
   @Column({ type: 'date' })
   dob: Date;
 
