@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateUserLoginLocationDto } from './dto/create-user-login-location.dto';
-import { UpdateUserLoginLocationDto } from './dto/update-user-login-location.dto';
 import { Repository } from 'typeorm';
 import { UserLoginLocation } from './entities/user-login-location.entity';
 
@@ -35,15 +34,9 @@ export class UserLoginLocationService {
     });
   }
 
-  async update(
-    id: number,
-    updateUserLoginLocationDto: UpdateUserLoginLocationDto,
-  ) {
-    await this.uLLRepository.update(id, updateUserLoginLocationDto);
-    return this.findOne(id);
-  }
-
-  async remove(id: number) {
-    await this.uLLRepository.delete(id);
+  async findAllLoginLocationByUserId(userId: number) {
+    return await this.uLLRepository.find({
+      where: { userId },
+    });
   }
 }
