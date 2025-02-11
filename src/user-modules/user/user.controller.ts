@@ -17,7 +17,6 @@ import { User } from './entities/user.entity';
 import { OnlyAdminGuard } from 'src/auth/guards/only-admin.guard';
 import { AuthGuard } from '@nestjs/passport';
 import { MeAndAdminGuard } from 'src/auth/guards/me-and-admin.guard';
-import { hash } from 'crypto';
 
 @Controller('user')
 export class UsersController {
@@ -25,6 +24,8 @@ export class UsersController {
 
   @ApiOperation({ summary: 'Create new user' })
   @ApiResponse({ status: 201, type: User })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @Post()
@@ -34,6 +35,8 @@ export class UsersController {
 
   @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({ status: 200, type: [User] })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @Get()
@@ -43,6 +46,8 @@ export class UsersController {
 
   @ApiOperation({ summary: 'Get user by id' })
   @ApiResponse({ status: 200, type: User })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), MeAndAdminGuard)
   @Get(':id')
@@ -50,18 +55,24 @@ export class UsersController {
     return this.usersService.findOne(+id);
   }
 
+  @ApiResponse({ status: 200, type: User })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @ApiBearerAuth()
   @Patch(':id')
-  @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     delete updateUserDto.gender;
 
     return this.usersService.update(+id, updateUserDto);
   }
 
+  @ApiResponse({ status: 200, type: User })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiBearerAuth()
-  @Put(':id')
   @UseGuards(AuthGuard('jwt'), MeAndAdminGuard)
+  @Put(':id')
   updateUserInfo(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
@@ -73,6 +84,9 @@ export class UsersController {
     return this.usersService.update(+id, updateUserDto);
   }
 
+  @ApiResponse({ status: 200, type: User })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), MeAndAdminGuard)
   @Delete(':id')
