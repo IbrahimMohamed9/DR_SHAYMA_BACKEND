@@ -4,6 +4,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { CreateUserDto } from 'src/user-modules/user/dto/create-user.dto';
 import { JwtService } from '@nestjs/jwt';
+import { hash } from 'crypto';
 
 @Injectable()
 export class AuthService {
@@ -14,7 +15,9 @@ export class AuthService {
   ) {}
 
   async login(loginDto: LoginDto, ip: string) {
-    const { email, password } = loginDto;
+    const { email } = loginDto;
+    const password = hash('sha256', loginDto.password);
+
     const user = await this.userService.findByEmail(email);
     if (!user || user.password !== password)
       throw new UnauthorizedException('Invalid credentials');
