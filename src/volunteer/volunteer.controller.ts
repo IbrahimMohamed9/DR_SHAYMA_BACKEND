@@ -58,6 +58,7 @@ export class VolunteerController {
     return this.volunteerService.update(+id, updateVolunteerDto);
   }
 
+  @ApiResponse({ status: 204, description: 'Deleted successfully' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiBearerAuth()

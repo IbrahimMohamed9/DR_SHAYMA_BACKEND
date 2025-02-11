@@ -83,7 +83,7 @@ export class UsersController {
     return this.usersService.update(+id, updateUserDto);
   }
 
-  @ApiResponse({ status: 200, type: CreateUserDto })
+  @ApiResponse({ status: 204, description: 'Deleted successfully' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiBearerAuth()
