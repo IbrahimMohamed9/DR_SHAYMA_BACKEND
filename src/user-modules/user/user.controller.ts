@@ -13,7 +13,6 @@ import { UsersService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
-import { User } from './entities/user.entity';
 import { OnlyAdminGuard } from 'src/auth/guards/only-admin.guard';
 import { AuthGuard } from '@nestjs/passport';
 import { MeAndAdminGuard } from 'src/auth/guards/me-and-admin.guard';
@@ -23,7 +22,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @ApiOperation({ summary: 'Create new user' })
-  @ApiResponse({ status: 201, type: User })
+  @ApiResponse({ status: 201, type: CreateUserDto })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiBearerAuth()
@@ -34,7 +33,7 @@ export class UsersController {
   }
 
   @ApiOperation({ summary: 'Get all users' })
-  @ApiResponse({ status: 200, type: [User] })
+  @ApiResponse({ status: 200, type: [CreateUserDto] })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiBearerAuth()
@@ -45,7 +44,7 @@ export class UsersController {
   }
 
   @ApiOperation({ summary: 'Get user by id' })
-  @ApiResponse({ status: 200, type: User })
+  @ApiResponse({ status: 200, type: CreateUserDto })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiBearerAuth()
@@ -55,7 +54,7 @@ export class UsersController {
     return this.usersService.findOne(+id);
   }
 
-  @ApiResponse({ status: 200, type: User })
+  @ApiResponse({ status: 200, type: CreateUserDto })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
@@ -67,7 +66,7 @@ export class UsersController {
     return this.usersService.update(+id, updateUserDto);
   }
 
-  @ApiResponse({ status: 200, type: User })
+  @ApiResponse({ status: 200, type: CreateUserDto })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiBearerAuth()
@@ -84,7 +83,7 @@ export class UsersController {
     return this.usersService.update(+id, updateUserDto);
   }
 
-  @ApiResponse({ status: 200, type: User })
+  @ApiResponse({ status: 200, type: CreateUserDto })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiBearerAuth()
