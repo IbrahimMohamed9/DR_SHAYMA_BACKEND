@@ -47,6 +47,7 @@ export class FeedbackCategoryController {
     return this.feedbackCategoryService.findOne(id);
   }
 
+  @ApiResponse({ status: 200, type: FeedbackCategory })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiBearerAuth()
@@ -59,6 +60,7 @@ export class FeedbackCategoryController {
     return this.feedbackCategoryService.update(id, updateFeedbackCategoryDto);
   }
 
+  @ApiResponse({ status: 204, description: 'Deleted successfully' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiBearerAuth()
