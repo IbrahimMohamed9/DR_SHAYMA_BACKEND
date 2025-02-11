@@ -6,16 +6,17 @@ export const databaseProviders = [
     useFactory: async () => {
       const dataSource = new DataSource({
         type: 'mysql',
-        host: 'localhost',
-        port: 3306,
-        username: 'root',
-        password: '1234',
-        database: 'dr_shayma',
+        host: process.env.DB_HOST || 'localhost',
+        port: +process.env.DB_PORT,
+        username: process.env.DB_USER,
+        password: process.env.DB_USER_PASSWORD,
+        database: process.env.DB_NAME,
         entities: [
           __dirname + '/../**/entities/*.entity{.ts,.js}',
-          __dirname + '/../user-modules/**/entities/*.entity{.ts,.js}',
+          __dirname + '/../**/**/entities/*.entity{.ts,.js}',
         ],
         synchronize: true,
+        // dropSchema: true,
       });
 
       return dataSource.initialize();
