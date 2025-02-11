@@ -11,6 +11,7 @@ async function bootstrap() {
     .setTitle('Dr.Shayma API')
     .setDescription('API documentation for Dr.Shayma application')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

@@ -2,20 +2,28 @@ import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { DatabaseModule } from 'src/database/database.module';
-import { userLoginLocationProviders } from 'src/user-login-location/user-login-location.provider';
-import { userProviders } from 'src/user/user.provider';
-import { UsersService } from 'src/user/user.service';
-import { UserLoginLocationService } from 'src/user-login-location/user-login-location.service';
+import { UserModule } from 'src/user-modules/user/user.module';
+import { UserLoginLocationModule } from 'src/user-modules/user-login-location/user-login-location.module';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from './jwt.strategy';
 
 @Module({
-  imports: [DatabaseModule],
-  controllers: [AuthController],
-  providers: [
-    ...userLoginLocationProviders,
-    ...userProviders,
-    AuthService,
-    UsersService,
-    UserLoginLocationService,
+  imports: [
+    DatabaseModule,
+    UserModule,
+    UserLoginLocationModule,
+    PassportModule,
+    JwtModule.registerAsync({
+      useFactory: () => {
+        return {
+          secret: process.env.JWT_SECRET,
+          signOptions: { expiresIn: '7d' },
+        };
+      },
+    }),
   ],
+  controllers: [AuthController],
+  providers: [AuthService, JwtStrategy],
 })
 export class AuthModule {}
