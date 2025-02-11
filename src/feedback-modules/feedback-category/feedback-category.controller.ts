@@ -6,12 +6,15 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { FeedbackCategoryService } from './feedback-category.service';
 import { CreateFeedbackCategoryDto } from './dto/create-feedback-category.dto';
 import { UpdateFeedbackCategoryDto } from './dto/update-feedback-category.dto';
 import { FeedbackCategory } from './entities/feedback-category.entity';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+import { OnlyAdminGuard } from 'src/auth/guards/only-admin.guard';
 
 @Controller('feedback-category')
 export class FeedbackCategoryController {
@@ -21,6 +24,10 @@ export class FeedbackCategoryController {
 
   @ApiOperation({ summary: 'Create new feedback category' })
   @ApiResponse({ status: 201, type: FeedbackCategory })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @Post()
   create(@Body() createFeedbackCategoryDto: CreateFeedbackCategoryDto) {
     return this.feedbackCategoryService.create(createFeedbackCategoryDto);
@@ -40,6 +47,10 @@ export class FeedbackCategoryController {
     return this.feedbackCategoryService.findOne(id);
   }
 
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -48,6 +59,10 @@ export class FeedbackCategoryController {
     return this.feedbackCategoryService.update(id, updateFeedbackCategoryDto);
   }
 
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.feedbackCategoryService.remove(id);
