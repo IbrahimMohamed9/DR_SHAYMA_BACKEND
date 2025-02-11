@@ -6,6 +6,7 @@ export class MeAndAdminGuard extends AuthGuard('jwt') {
   canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest();
     const user = request.user;
-    return user?.role === 'admin' || user?.userId === request.params.id;
+
+    return user?.role === 'admin' || user?.id === +request.params.id;
   }
 }
