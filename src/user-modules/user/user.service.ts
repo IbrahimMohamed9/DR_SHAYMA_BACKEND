@@ -3,6 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
+import { hash } from 'crypto';
 
 @Injectable()
 export class UsersService {
@@ -13,6 +14,7 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto) {
     const newUser = this.userRepository.create(createUserDto);
+    newUser.password = hash('sha256', newUser.password);
     return await this.userRepository.save(newUser);
   }
 
@@ -29,6 +31,9 @@ export class UsersService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
+    if (updateUserDto.password)
+      updateUserDto.password = hash('sha256', updateUserDto.password);
+
     await this.userRepository.update(id, updateUserDto);
     return this.findOne(id);
   }
