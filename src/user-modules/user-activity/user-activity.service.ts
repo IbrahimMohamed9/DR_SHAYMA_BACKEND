@@ -1,6 +1,5 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateUserActivityDto } from './dto/create-user-activity.dto';
-import { UpdateUserActivityDto } from './dto/update-user-activity.dto';
 import { Repository } from 'typeorm';
 import { UserActivity } from './entities/user-activity.entity';
 
@@ -10,14 +9,13 @@ export class UserActivityService {
     @Inject('USER_ACTIVITY_REPOSITORY')
     private userActivityRepository: Repository<UserActivity>,
   ) {}
-  async create(createUserActivityDto: CreateUserActivityDto, req: any) {
-    if (!req.user || !req.user.id) {
+  async create(createUserActivityDto: CreateUserActivityDto, user: any) {
+    if (!user || !user?.id)
       throw new UnauthorizedException('User not authenticated');
-    }
 
     const newActivity = this.userActivityRepository.create({
       activity: createUserActivityDto.activity,
-      userId: req.user.id,
+      userId: user.id,
     });
 
     try {
@@ -31,16 +29,37 @@ export class UserActivityService {
     return await this.userActivityRepository.find();
   }
 
+  async findAllWithUser() {
+    return await this.userActivityRepository.find({
+      relations: ['user'],
+    });
+  }
+
+  async findAllByUserId(userId: number) {
+    return await this.userActivityRepository.find({
+      where: { userId },
+    });
+  }
+
+  async findAllByUserIdWithUser(userId: number) {
+    return await this.userActivityRepository.find({
+      where: { userId },
+      relations: ['user'],
+    });
+  }
+
   async findOne(id: number) {
-    return await this.userActivityRepository.findOne({ where: { id } });
+    const result = await this.userActivityRepository.findOne({ where: { id } });
+    if (!result) throw new Error('User activity not found');
+    return result;
   }
 
-  async update(id: number, updateUserActivityDto: UpdateUserActivityDto) {
-    await this.userActivityRepository.update(id, updateUserActivityDto);
-    return this.findOne(id);
-  }
-
-  async remove(id: number) {
-    await this.userActivityRepository.delete(id);
+  async findOneWithUser(id: number) {
+    const result = await this.userActivityRepository.findOne({
+      where: { id },
+      relations: ['user'],
+    });
+    if (!result) throw new Error('User activity not found');
+    return result;
   }
 }
