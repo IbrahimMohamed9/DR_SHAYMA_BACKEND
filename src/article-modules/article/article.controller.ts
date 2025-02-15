@@ -9,6 +9,7 @@ import {
   ValidationPipe,
   UsePipes,
   UseGuards,
+  HttpCode,
 } from '@nestjs/common';
 import { ArticleService } from './article.service';
 import { CreateArticleDto } from './dto/create-article.dto';
@@ -65,6 +66,7 @@ export class ArticleController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
+  @HttpCode(204)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.articleService.remove(+id);

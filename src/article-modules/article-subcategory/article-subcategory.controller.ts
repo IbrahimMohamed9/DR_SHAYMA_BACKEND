@@ -9,6 +9,7 @@ import {
   ValidationPipe,
   UsePipes,
   UseGuards,
+  HttpCode,
 } from '@nestjs/common';
 import { ArticleSubcategoryService } from './article-subcategory.service';
 import { CreateArticleSubcategoryDto } from './dto/create-article-subcategory.dto';
@@ -73,6 +74,7 @@ export class ArticleSubcategoryController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
+  @HttpCode(204)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.articleSubcategoryService.remove(id);

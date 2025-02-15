@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  HttpCode,
 } from '@nestjs/common';
 import { FeedbackCategoryService } from './feedback-category.service';
 import { CreateFeedbackCategoryDto } from './dto/create-feedback-category.dto';
@@ -65,6 +66,7 @@ export class FeedbackCategoryController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
+  @HttpCode(204)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.feedbackCategoryService.remove(id);
