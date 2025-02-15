@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Repository } from 'typeorm';
@@ -15,6 +15,12 @@ export class UsersService {
   async create(createUserDto: CreateUserDto) {
     const newUser = this.userRepository.create(createUserDto);
     newUser.password = hash('sha256', newUser.password);
+
+    const checkEmail = await this.findByEmail(newUser.email);
+    if (checkEmail) return new BadRequestException('Email already exists');
+    const checkPhone = await this.findByPhone(newUser.phone);
+    if (checkPhone) return new BadRequestException('Phone already exists');
+
     return await this.userRepository.save(newUser);
   }
 
@@ -28,6 +34,10 @@ export class UsersService {
 
   async findByEmail(email: string) {
     return await this.userRepository.findOne({ where: { email } });
+  }
+
+  async findByPhone(phone: string) {
+    return await this.userRepository.findOne({ where: { phone } });
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {

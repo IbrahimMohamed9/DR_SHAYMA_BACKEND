@@ -16,11 +16,14 @@ export class AuthService {
 
   async login(loginDto: LoginDto, ip: string) {
     const { email } = loginDto;
-    const password = hash('sha256', loginDto.password);
+    const errorMsg = 'Invalid Email or Password';
 
     const user = await this.userService.findByEmail(email);
-    if (!user || user.password !== password)
-      throw new UnauthorizedException('Invalid credentials');
+    if (!user) throw new UnauthorizedException(errorMsg);
+
+    const password = hash('sha256', loginDto.password);
+
+    if (user.password !== password) throw new UnauthorizedException(errorMsg);
 
     this.userLoginLocationService.create({
       ipAddress: ip,
