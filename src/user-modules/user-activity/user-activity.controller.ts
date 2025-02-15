@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { UserActivityService } from './user-activity.service';
 import { CreateUserActivityDto } from './dto/create-user-activity.dto';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
@@ -19,8 +27,11 @@ export class UserActivityController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), OnlyMeGuard)
   @Post()
-  create(@Body() createUserActivityDto: CreateUserActivityDto) {
-    return this.userActivityService.create(createUserActivityDto);
+  create(
+    @Body() createUserActivityDto: CreateUserActivityDto,
+    @Request() req: any,
+  ) {
+    return this.userActivityService.create(createUserActivityDto, req);
   }
 
   @ApiOperation({ summary: 'Get all user activities' })
