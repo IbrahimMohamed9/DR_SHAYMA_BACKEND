@@ -17,6 +17,7 @@ export class UserLoginLocationService {
   async findAll() {
     return await this.uLLRepository.find();
   }
+
   async findAllWithUser() {
     return await this.uLLRepository.find({
       relations: ['user'],
