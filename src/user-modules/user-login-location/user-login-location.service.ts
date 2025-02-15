@@ -25,19 +25,31 @@ export class UserLoginLocationService {
   }
 
   async findOne(id: number) {
-    return await this.uLLRepository.findOne({ where: { id } });
+    const result = await this.uLLRepository.findOne({ where: { id } });
+    if (!result) throw new Error('User login location not found');
+    return result;
   }
 
   async findOneWithUser(id: number) {
-    return await this.uLLRepository.findOne({
+    const result = await this.uLLRepository.findOne({
       where: { id },
       relations: ['user'],
     });
+
+    if (!result) throw new Error('User login location not found');
+    return result;
   }
 
   async findAllLoginLocationByUserId(userId: number) {
     return await this.uLLRepository.find({
       where: { userId },
+    });
+  }
+
+  async findAllLoginLocationByUserIdWithUser(userId: number) {
+    return await this.uLLRepository.find({
+      where: { userId },
+      relations: ['user'],
     });
   }
 }

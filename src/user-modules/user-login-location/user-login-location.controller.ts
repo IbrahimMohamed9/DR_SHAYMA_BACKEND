@@ -25,8 +25,8 @@ export class UserLoginLocationController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @Get()
-  findAll() {
-    return this.userLoginLocationService.findAll();
+  async findAll() {
+    return await this.userLoginLocationService.findAll();
   }
 
   @ApiOperation({
@@ -40,10 +40,27 @@ export class UserLoginLocationController {
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    const result = await this.userLoginLocationService.findOne(+id);
-    if (!result) throw new NotFoundException('Not Found');
+    try {
+      return await this.userLoginLocationService.findOne(+id);
+    } catch (error) {
+      if (error.message === 'User login location not found') {
+        throw new NotFoundException('Not Found');
+      }
+      throw error;
+    }
+  }
 
-    return result;
+  @ApiOperation({ summary: 'Get user login location by user id without user' })
+  @ApiResponse({ status: 200, type: [CreateUserLoginLocationDto] })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
+  @Get('user/:userId')
+  async findAllLoginLocationByUserId(@Param('userId') userId: string) {
+    return await this.userLoginLocationService.findAllLoginLocationByUserId(
+      +userId,
+    );
   }
 
   @ApiOperation({ summary: 'Get user login location with user' })
@@ -52,9 +69,9 @@ export class UserLoginLocationController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
-  @Get('with-use/user')
-  findAllWithUser() {
-    return this.userLoginLocationService.findAllWithUser();
+  @Get('with-use')
+  async findAllWithUser() {
+    return await this.userLoginLocationService.findAllWithUser();
   }
 
   @ApiOperation({ summary: 'Get user login location with user by id' })
@@ -64,18 +81,27 @@ export class UserLoginLocationController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @Get('with-user/:id')
-  findOneWithUser(@Param('id') id: string) {
-    return this.userLoginLocationService.findOneWithUser(+id);
+  async findOneWithUser(@Param('id') id: string) {
+    try {
+      return await this.userLoginLocationService.findOneWithUser(+id);
+    } catch (error) {
+      if (error.message === 'User login location not found')
+        throw new NotFoundException('Not Found');
+
+      throw error;
+    }
   }
 
-  @ApiOperation({ summary: 'Get user login location by user id' })
+  @ApiOperation({ summary: 'Get user login location by user id with user' })
   @ApiResponse({ status: 200, type: [CreateUserLoginLocationDto] })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @Get('with-user/user/:userId')
-  async findAllLoginLocationByUserId(@Param('userId') userId: string) {
-    return this.userLoginLocationService.findAllLoginLocationByUserId(+userId);
+  async findAllLoginLocationByUserIdWithUser(@Param('userId') userId: string) {
+    return await this.userLoginLocationService.findAllLoginLocationByUserIdWithUser(
+      +userId,
+    );
   }
 }
