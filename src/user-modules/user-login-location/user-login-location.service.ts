@@ -24,11 +24,11 @@ export class UserLoginLocationService {
   }
 
   async findOne(id: number) {
-    return await this.uLLRepository.find({ where: { id } });
+    return await this.uLLRepository.findOne({ where: { id } });
   }
 
   async findOneWithUser(id: number) {
-    return await this.uLLRepository.find({
+    return await this.uLLRepository.findOne({
       where: { id },
       relations: ['user'],
     });

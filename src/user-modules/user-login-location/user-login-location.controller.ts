@@ -1,4 +1,10 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  UseGuards,
+} from '@nestjs/common';
 import { UserLoginLocationService } from './user-login-location.service';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { UserLoginLocation } from './entities/user-login-location.entity';
@@ -23,15 +29,21 @@ export class UserLoginLocationController {
     return this.userLoginLocationService.findAll();
   }
 
-  @ApiOperation({ summary: 'Get user login location without user by id' })
+  @ApiOperation({
+    summary: 'Get user login location without user by login location id',
+  })
   @ApiResponse({ status: 200, type: CreateUserLoginLocationDto })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Not Found' })
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userLoginLocationService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const result = await this.userLoginLocationService.findOne(+id);
+    if (!result) throw new NotFoundException('Not Found');
+
+    return result;
   }
 
   @ApiOperation({ summary: 'Get user login location with user' })
@@ -40,7 +52,7 @@ export class UserLoginLocationController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
-  @Get('with-user')
+  @Get('with-use/user')
   findAllWithUser() {
     return this.userLoginLocationService.findAllWithUser();
   }
@@ -62,8 +74,8 @@ export class UserLoginLocationController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
-  @Get('with-user/:userId')
-  findAllLoginLocationByUserId(@Param('userId') userId: string) {
+  @Get('with-user/user/:userId')
+  async findAllLoginLocationByUserId(@Param('userId') userId: string) {
     return this.userLoginLocationService.findAllLoginLocationByUserId(+userId);
   }
 }
