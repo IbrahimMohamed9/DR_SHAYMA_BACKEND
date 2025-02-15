@@ -31,22 +31,22 @@ export class BookController {
   @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @Post()
-  create(@Body() createBookDto: CreateBookDto) {
-    return this.bookService.create(createBookDto);
+  async create(@Body() createBookDto: CreateBookDto) {
+    return await this.bookService.create(createBookDto);
   }
 
   @ApiOperation({ summary: 'Get all books' })
   @ApiResponse({ status: 200, type: [Book] })
   @Get()
-  findAll() {
-    return this.bookService.findAll();
+  async findAll() {
+    return await this.bookService.findAll();
   }
 
   @ApiOperation({ summary: 'Get book by id' })
   @ApiResponse({ status: 200, type: Book })
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.bookService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return await this.bookService.findOne(+id);
   }
 
   @ApiOperation({ summary: 'Update book by id' })
@@ -56,8 +56,8 @@ export class BookController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto) {
-    return this.bookService.update(+id, updateBookDto);
+  async update(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto) {
+    return await this.bookService.update(+id, updateBookDto);
   }
 
   @ApiOperation({ summary: 'Delete book by id' })
@@ -68,7 +68,7 @@ export class BookController {
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @HttpCode(204)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.bookService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return await this.bookService.remove(+id);
   }
 }

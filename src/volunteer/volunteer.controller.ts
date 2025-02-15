@@ -28,22 +28,22 @@ export class VolunteerController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @Post()
-  create(@Body() createVolunteerDto: CreateVolunteerDto) {
-    return this.volunteerService.create(createVolunteerDto);
+  async create(@Body() createVolunteerDto: CreateVolunteerDto) {
+    return await this.volunteerService.create(createVolunteerDto);
   }
 
   @ApiOperation({ summary: 'Get all volunteers' })
   @ApiResponse({ status: 200, type: Volunteer, isArray: true })
   @Get()
-  findAll() {
-    return this.volunteerService.findAll();
+  async findAll() {
+    return await this.volunteerService.findAll();
   }
 
   @ApiOperation({ summary: 'Get volunteer by id' })
   @ApiResponse({ status: 200, type: Volunteer })
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.volunteerService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return await this.volunteerService.findOne(+id);
   }
 
   @ApiResponse({ status: 200, type: Volunteer })
@@ -52,11 +52,11 @@ export class VolunteerController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateVolunteerDto: UpdateVolunteerDto,
   ) {
-    return this.volunteerService.update(+id, updateVolunteerDto);
+    return await this.volunteerService.update(+id, updateVolunteerDto);
   }
 
   @ApiResponse({ status: 204, description: 'Deleted successfully' })
@@ -66,7 +66,7 @@ export class VolunteerController {
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @HttpCode(204)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.volunteerService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return await this.volunteerService.remove(+id);
   }
 }

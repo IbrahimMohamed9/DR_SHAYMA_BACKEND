@@ -30,8 +30,8 @@ export class UsersController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto) {
+    return await this.usersService.create(createUserDto);
   }
 
   @ApiOperation({ summary: 'Get all users' })
@@ -41,8 +41,8 @@ export class UsersController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  async findAll() {
+    return await this.usersService.findAll();
   }
 
   @ApiOperation({ summary: 'Get user by id' })
@@ -60,7 +60,7 @@ export class UsersController {
       throw new NotFoundException('User not found');
     }
 
-    return user;
+    return await user;
   }
 
   @ApiResponse({ status: 200, type: CreateUserDto })
@@ -69,10 +69,10 @@ export class UsersController {
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @ApiBearerAuth()
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     delete updateUserDto.gender;
 
-    return this.usersService.update(+id, updateUserDto);
+    return await this.usersService.update(+id, updateUserDto);
   }
 
   @ApiResponse({ status: 200, type: CreateUserDto })
@@ -81,7 +81,7 @@ export class UsersController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), MeAndAdminGuard)
   @Put(':id')
-  updateUserInfo(
+  async updateUserInfo(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
   ) {
@@ -89,7 +89,7 @@ export class UsersController {
     delete updateUserDto.email;
     delete updateUserDto.gender;
 
-    return this.usersService.update(+id, updateUserDto);
+    return await this.usersService.update(+id, updateUserDto);
   }
 
   @ApiResponse({ status: 204, description: 'Deleted successfully' })
@@ -99,7 +99,7 @@ export class UsersController {
   @UseGuards(AuthGuard('jwt'), MeAndAdminGuard)
   @HttpCode(204)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return await this.usersService.remove(+id);
   }
 }

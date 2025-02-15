@@ -31,22 +31,22 @@ export class ArticleController {
   @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @Post()
-  create(@Body() createArticleDto: CreateArticleDto) {
-    return this.articleService.create(createArticleDto);
+  async create(@Body() createArticleDto: CreateArticleDto) {
+    return await this.articleService.create(createArticleDto);
   }
 
   @ApiOperation({ summary: 'Get all articles' })
   @ApiResponse({ status: 200, type: [Article] })
   @Get()
-  findAll() {
-    return this.articleService.findAll();
+  async findAll() {
+    return await this.articleService.findAll();
   }
 
   @ApiOperation({ summary: 'Get article by id' })
   @ApiResponse({ status: 200, type: Article })
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.articleService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return await this.articleService.findOne(+id);
   }
 
   @ApiOperation({ summary: 'Update article by id' })
@@ -56,8 +56,11 @@ export class ArticleController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateArticleDto: UpdateArticleDto) {
-    return this.articleService.update(+id, updateArticleDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateArticleDto: UpdateArticleDto,
+  ) {
+    return await this.articleService.update(+id, updateArticleDto);
   }
 
   @ApiOperation({ summary: 'Delete article by id' })
@@ -68,7 +71,7 @@ export class ArticleController {
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @HttpCode(204)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.articleService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return await this.articleService.remove(+id);
   }
 }

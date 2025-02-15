@@ -33,22 +33,26 @@ export class ArticleSubcategoryController {
   @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @Post()
-  create(@Body() createArticleSubcategoryDto: CreateArticleSubcategoryDto) {
-    return this.articleSubcategoryService.create(createArticleSubcategoryDto);
+  async create(
+    @Body() createArticleSubcategoryDto: CreateArticleSubcategoryDto,
+  ) {
+    return await this.articleSubcategoryService.create(
+      createArticleSubcategoryDto,
+    );
   }
 
   @ApiOperation({ summary: 'get all article subcategories' })
   @ApiResponse({ status: 200, type: ArticleSubcategory, isArray: true })
   @Get()
-  findAll() {
-    return this.articleSubcategoryService.findAll();
+  async findAll() {
+    return await this.articleSubcategoryService.findAll();
   }
 
   @ApiOperation({ summary: 'get article subcategory by id' })
   @ApiResponse({ status: 200, type: ArticleSubcategory })
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.articleSubcategoryService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    return await this.articleSubcategoryService.findOne(id);
   }
 
   @ApiOperation({ summary: 'Update article subcategory by id' })
@@ -58,11 +62,11 @@ export class ArticleSubcategoryController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateArticleSubcategoryDto: UpdateArticleSubcategoryDto,
   ) {
-    return this.articleSubcategoryService.update(
+    return await this.articleSubcategoryService.update(
       id,
       updateArticleSubcategoryDto,
     );
@@ -76,7 +80,7 @@ export class ArticleSubcategoryController {
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @HttpCode(204)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.articleSubcategoryService.remove(id);
+  async remove(@Param('id') id: string) {
+    return await this.articleSubcategoryService.remove(id);
   }
 }

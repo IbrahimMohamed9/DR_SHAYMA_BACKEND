@@ -32,22 +32,22 @@ export class ArticleCategoryController {
   @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @Post()
-  create(@Body() createArticleCategoryDto: CreateArticleCategoryDto) {
-    return this.articleCategoryService.create(createArticleCategoryDto);
+  async create(@Body() createArticleCategoryDto: CreateArticleCategoryDto) {
+    return await this.articleCategoryService.create(createArticleCategoryDto);
   }
 
   @Get()
   @ApiOperation({ summary: 'Get all article category' })
   @ApiResponse({ status: 200, type: [CreateArticleCategoryDto] })
-  findAll() {
-    return this.articleCategoryService.findAll();
+  async findAll() {
+    return await this.articleCategoryService.findAll();
   }
 
   @ApiOperation({ summary: 'Get article category by id' })
   @ApiResponse({ status: 200, type: CreateArticleCategoryDto })
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.articleCategoryService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    return await this.articleCategoryService.findOne(id);
   }
 
   @ApiOperation({ summary: 'Update article category by id' })
@@ -57,11 +57,14 @@ export class ArticleCategoryController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateArticleCategoryDto: UpdateArticleCategoryDto,
   ) {
-    return this.articleCategoryService.update(id, updateArticleCategoryDto);
+    return await this.articleCategoryService.update(
+      id,
+      updateArticleCategoryDto,
+    );
   }
 
   @ApiOperation({ summary: 'Delete article by id' })
@@ -72,7 +75,7 @@ export class ArticleCategoryController {
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @HttpCode(204)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.articleCategoryService.remove(id);
+  async remove(@Param('id') id: string) {
+    return await this.articleCategoryService.remove(id);
   }
 }

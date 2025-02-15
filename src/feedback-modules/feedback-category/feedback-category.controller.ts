@@ -30,22 +30,22 @@ export class FeedbackCategoryController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @Post()
-  create(@Body() createFeedbackCategoryDto: CreateFeedbackCategoryDto) {
-    return this.feedbackCategoryService.create(createFeedbackCategoryDto);
+  async create(@Body() createFeedbackCategoryDto: CreateFeedbackCategoryDto) {
+    return await this.feedbackCategoryService.create(createFeedbackCategoryDto);
   }
 
   @ApiOperation({ summary: 'Get all feedback categories' })
   @ApiResponse({ status: 200, type: FeedbackCategory, isArray: true })
   @Get()
-  findAll() {
-    return this.feedbackCategoryService.findAll();
+  async findAll() {
+    return await this.feedbackCategoryService.findAll();
   }
 
   @ApiOperation({ summary: 'Get feedback category by id' })
   @ApiResponse({ status: 200, type: FeedbackCategory })
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.feedbackCategoryService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    return await this.feedbackCategoryService.findOne(id);
   }
 
   @ApiResponse({ status: 200, type: FeedbackCategory })
@@ -54,11 +54,14 @@ export class FeedbackCategoryController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateFeedbackCategoryDto: UpdateFeedbackCategoryDto,
   ) {
-    return this.feedbackCategoryService.update(id, updateFeedbackCategoryDto);
+    return await this.feedbackCategoryService.update(
+      id,
+      updateFeedbackCategoryDto,
+    );
   }
 
   @ApiResponse({ status: 204, description: 'Deleted successfully' })
@@ -68,7 +71,7 @@ export class FeedbackCategoryController {
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @HttpCode(204)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.feedbackCategoryService.remove(id);
+  async remove(@Param('id') id: string) {
+    return await this.feedbackCategoryService.remove(id);
   }
 }
