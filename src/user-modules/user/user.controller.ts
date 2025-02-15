@@ -8,6 +8,8 @@ import {
   Delete,
   UseGuards,
   Put,
+  HttpCode,
+  NotFoundException,
 } from '@nestjs/common';
 import { UsersService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -47,11 +49,18 @@ export class UsersController {
   @ApiResponse({ status: 200, type: CreateUserDto })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'User not found' })
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), MeAndAdminGuard)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const user = await this.usersService.findOne(+id);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user;
   }
 
   @ApiResponse({ status: 200, type: CreateUserDto })
@@ -88,6 +97,7 @@ export class UsersController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), MeAndAdminGuard)
+  @HttpCode(204)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);
