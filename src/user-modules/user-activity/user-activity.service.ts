@@ -10,6 +10,7 @@ export class UserActivityService {
     private userActivityRepository: Repository<UserActivity>,
   ) {}
   async create(createUserActivityDto: CreateUserActivityDto, user: any) {
+    //TODO
     if (!user || !user?.id)
       throw new UnauthorizedException('User not authenticated');
 

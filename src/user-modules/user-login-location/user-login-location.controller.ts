@@ -1,6 +1,7 @@
 import {
   Controller,
   Get,
+  InternalServerErrorException,
   NotFoundException,
   Param,
   UseGuards,
@@ -46,7 +47,8 @@ export class UserLoginLocationController {
       if (error.message === 'User login location not found') {
         throw new NotFoundException('Not Found');
       }
-      throw error;
+
+      throw new InternalServerErrorException('An unexpected error occurred');
     }
   }
 
@@ -85,10 +87,11 @@ export class UserLoginLocationController {
     try {
       return await this.userLoginLocationService.findOneWithUser(+id);
     } catch (error) {
-      if (error.message === 'User login location not found')
+      if (error.message === 'User login location not found') {
         throw new NotFoundException('Not Found');
+      }
 
-      throw error;
+      throw new InternalServerErrorException('An unexpected error occurred');
     }
   }
 

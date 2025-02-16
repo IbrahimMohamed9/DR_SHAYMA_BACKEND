@@ -6,6 +6,7 @@ import {
   Param,
   UseGuards,
   NotFoundException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { UserActivityService } from './user-activity.service';
 import { CreateUserActivityDto } from './dto/create-user-activity.dto';
@@ -56,9 +57,11 @@ export class UserActivityController {
     try {
       return await this.userActivityService.findOne(+id);
     } catch (error) {
-      if (error.msg === 'User activity not found')
+      if (error.message === 'User activity not found') {
         throw new NotFoundException('Not Found');
-      throw error;
+      }
+
+      throw new InternalServerErrorException('An unexpected error occurred');
     }
   }
 
@@ -96,9 +99,11 @@ export class UserActivityController {
     try {
       return await this.userActivityService.findOneWithUser(+id);
     } catch (error) {
-      if (error.msg === 'User activity not found')
+      if (error.message === 'User activity not found') {
         throw new NotFoundException('Not Found');
-      throw error;
+      }
+
+      throw new InternalServerErrorException('An unexpected error occurred');
     }
   }
 
