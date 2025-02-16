@@ -10,6 +10,8 @@ import {
   UsePipes,
   UseGuards,
   HttpCode,
+  BadRequestException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { ArticleService } from './article.service';
 import { CreateArticleDto } from './dto/create-article.dto';
@@ -25,6 +27,7 @@ export class ArticleController {
 
   @ApiOperation({ summary: 'Create new article' })
   @ApiResponse({ status: 201, type: Article })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiBearerAuth()
@@ -32,7 +35,15 @@ export class ArticleController {
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @Post()
   async create(@Body() createArticleDto: CreateArticleDto) {
-    return await this.articleService.create(createArticleDto);
+    try {
+      return await this.articleService.create(createArticleDto);
+    } catch (err) {
+      if (err.message === 'Article subcategory not found') {
+        throw new BadRequestException('Article subcategory not found');
+      }
+
+      throw new InternalServerErrorException();
+    }
   }
 
   @ApiOperation({ summary: 'Get all articles' })

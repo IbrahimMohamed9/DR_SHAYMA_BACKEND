@@ -10,6 +10,9 @@ import {
   UsePipes,
   ValidationPipe,
   HttpCode,
+  BadRequestException,
+  NotFoundException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { ArticleCategoryService } from './article-category.service';
 import { CreateArticleCategoryDto } from './dto/create-article-category.dto';
@@ -26,6 +29,7 @@ export class ArticleCategoryController {
 
   @ApiOperation({ summary: 'Create new article category' })
   @ApiResponse({ status: 201, type: CreateArticleCategoryDto })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiBearerAuth()
@@ -33,7 +37,14 @@ export class ArticleCategoryController {
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @Post()
   async create(@Body() createArticleCategoryDto: CreateArticleCategoryDto) {
-    return await this.articleCategoryService.create(createArticleCategoryDto);
+    try {
+      return await this.articleCategoryService.create(createArticleCategoryDto);
+    } catch (e) {
+      if (e.message === 'Article category already exists') {
+        throw new BadRequestException('Article category already exists');
+      }
+      throw new InternalServerErrorException('An unexpected error occurred');
+    }
   }
 
   @Get()
@@ -52,8 +63,10 @@ export class ArticleCategoryController {
 
   @ApiOperation({ summary: 'Update article category by id' })
   @ApiResponse({ status: 200, type: UpdateArticleCategoryDto })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Not Found' })
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @Patch(':id')
@@ -61,10 +74,19 @@ export class ArticleCategoryController {
     @Param('id') id: string,
     @Body() updateArticleCategoryDto: UpdateArticleCategoryDto,
   ) {
-    return await this.articleCategoryService.update(
-      id,
-      updateArticleCategoryDto,
-    );
+    try {
+      return await this.articleCategoryService.update(
+        id,
+        updateArticleCategoryDto,
+      );
+    } catch (e) {
+      if (e.message === 'Article category already exists') {
+        throw new BadRequestException('Article category already exists');
+      } else if (e.message === 'Article category not found') {
+        throw new NotFoundException('Article category not found');
+      }
+      throw new InternalServerErrorException('An unexpected error occurred');
+    }
   }
 
   @ApiOperation({ summary: 'Delete article by id' })

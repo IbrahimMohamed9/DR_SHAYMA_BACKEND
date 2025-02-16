@@ -12,10 +12,16 @@ export class ArticleCategoryService {
   ) {}
 
   async create(createArticleCategoryDto: CreateArticleCategoryDto) {
-    const newVolunteer = this.articleCategoryRepository.create(
+    const existingCategory = await this.findOne(
+      createArticleCategoryDto.categoryId,
+    );
+
+    if (existingCategory) throw new Error('Article category already exists');
+
+    const newCategory = this.articleCategoryRepository.create(
       createArticleCategoryDto,
     );
-    return await this.articleCategoryRepository.save(newVolunteer);
+    return this.articleCategoryRepository.save(newCategory);
   }
 
   async findAll() {
@@ -29,8 +35,23 @@ export class ArticleCategoryService {
   }
 
   async update(id: string, updateArticleCategoryDto: UpdateArticleCategoryDto) {
+    const existingCurrentCategory =
+      await this.articleCategoryRepository.findOne({
+        where: { categoryId: id },
+      });
+
+    if (!existingCurrentCategory) throw new Error('Article category not found');
+
+    const existingNewCategory = await this.articleCategoryRepository.findOne({
+      where: { categoryId: updateArticleCategoryDto.categoryId },
+    });
+
+    if (existingNewCategory) {
+      throw new Error('Article category already exists');
+    }
+
     await this.articleCategoryRepository.update(id, updateArticleCategoryDto);
-    return await this.findOne(id);
+    return await this.findOne(updateArticleCategoryDto.categoryId);
   }
 
   async remove(id: string) {

@@ -1,3 +1,4 @@
+import { ArticleSubcategoryService } from './../article-subcategory/article-subcategory.service';
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
@@ -9,11 +10,20 @@ export class ArticleService {
   constructor(
     @Inject('ARTICLE_REPOSITORY')
     private articleRepository: Repository<Article>,
+    private readonly articleSubcategoryService: ArticleSubcategoryService,
   ) {}
 
   async create(createArticleDto: CreateArticleDto) {
-    const newBook = this.articleRepository.create(createArticleDto);
-    return await this.articleRepository.save(newBook);
+    const articleSubcategory = await this.articleSubcategoryService.findOne(
+      createArticleDto.subcategoryId,
+    );
+
+    if (!articleSubcategory) {
+      throw new Error('Article subcategory not found');
+    }
+
+    const newArticle = this.articleRepository.create(createArticleDto);
+    return await this.articleRepository.save(newArticle);
   }
 
   async findAll() {

@@ -3,15 +3,33 @@ import { CreateArticleSubcategoryDto } from './dto/create-article-subcategory.dt
 import { UpdateArticleSubcategoryDto } from './dto/update-article-subcategory.dto';
 import { Repository } from 'typeorm';
 import { ArticleSubcategory } from './entities/article-subcategory.entity';
+import { ArticleCategoryService } from '../article-category/article-category.service';
 
 @Injectable()
 export class ArticleSubcategoryService {
   constructor(
     @Inject('ARTICLE_SUBCATEGORY_REPOSITORY')
     private articleSubcategoryRepository: Repository<ArticleSubcategory>,
+    private readonly articleCategoryService: ArticleCategoryService,
   ) {}
 
   async create(createArticleSubcategoryDto: CreateArticleSubcategoryDto) {
+    const category = await this.articleCategoryService.findOne(
+      createArticleSubcategoryDto.categoryId,
+    );
+
+    if (!category) {
+      throw new Error('Category not found');
+    }
+
+    const subcategory = await this.findOne(
+      createArticleSubcategoryDto.subcategoryId,
+    );
+
+    if (subcategory) {
+      throw new Error('Subcategory already exists');
+    }
+
     const newVolunteer = this.articleSubcategoryRepository.create(
       createArticleSubcategoryDto,
     );
@@ -32,11 +50,36 @@ export class ArticleSubcategoryService {
     id: string,
     updateArticleSubcategoryDto: UpdateArticleSubcategoryDto,
   ) {
+    const existingSubcategory = await this.findOne(id);
+    if (!existingSubcategory) {
+      throw new Error('Subcategory not found');
+    }
+
+    if (updateArticleSubcategoryDto.categoryId) {
+      const category = await this.articleCategoryService.findOne(
+        updateArticleSubcategoryDto.categoryId,
+      );
+      if (!category) {
+        throw new Error('New category not found');
+      }
+    }
+
+    if (updateArticleSubcategoryDto.subcategoryId) {
+      const subcategory = await this.findOne(
+        updateArticleSubcategoryDto.subcategoryId,
+      );
+      if (subcategory) {
+        throw new Error('Subcategory with this ID already exists');
+      }
+    }
+
     await this.articleSubcategoryRepository.update(
       id,
       updateArticleSubcategoryDto,
     );
-    return await this.findOne(id);
+
+    const newId = updateArticleSubcategoryDto.subcategoryId || id;
+    return await this.findOne(newId);
   }
 
   async remove(id: string) {

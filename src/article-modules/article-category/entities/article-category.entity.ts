@@ -12,6 +12,7 @@ export class ArticleCategory {
   @OneToMany(
     () => ArticleSubcategory,
     (articleSubcategory) => articleSubcategory.category,
+    { cascade: true, onDelete: 'CASCADE' },
   )
   subcategories: ArticleSubcategory[];
 }
