@@ -40,8 +40,13 @@ export class ArticleCategoryController {
     try {
       return await this.articleCategoryService.create(createArticleCategoryDto);
     } catch (e) {
-      if (e.message === 'Article category already exists') {
-        throw new BadRequestException('Article category already exists');
+      const isBadRequest = [
+        'Article Arabic category already exists',
+        'Article English category already exists',
+      ].includes(e.message);
+
+      if (isBadRequest) {
+        throw new BadRequestException(e.message);
       }
       throw new InternalServerErrorException('An unexpected error occurred');
     }
@@ -58,7 +63,7 @@ export class ArticleCategoryController {
   @ApiResponse({ status: 200, type: CreateArticleCategoryDto })
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    return await this.articleCategoryService.findOne(id);
+    return await this.articleCategoryService.findOne(+id);
   }
 
   @ApiOperation({ summary: 'Update article category by id' })

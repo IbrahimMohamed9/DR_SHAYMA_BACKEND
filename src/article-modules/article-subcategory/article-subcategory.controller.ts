@@ -67,7 +67,14 @@ export class ArticleSubcategoryController {
   @ApiResponse({ status: 200, type: ArticleSubcategory })
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    return await this.articleSubcategoryService.findOne(id);
+    return await this.articleSubcategoryService.findOne(+id);
+  }
+
+  @ApiOperation({ summary: 'get article subcategory by categoryId' })
+  @ApiResponse({ status: 200, type: ArticleSubcategory })
+  @Get('category/:categoryId')
+  async findByCategory(@Param('categoryId') categoryId: string) {
+    return await this.articleSubcategoryService.findByCategory(+categoryId);
   }
 
   @ApiOperation({ summary: 'Update article subcategory by id' })
@@ -86,7 +93,7 @@ export class ArticleSubcategoryController {
   ) {
     try {
       const updatedSubcategory = await this.articleSubcategoryService.update(
-        id,
+        +id,
         updateArticleSubcategoryDto,
       );
 

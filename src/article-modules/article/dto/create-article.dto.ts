@@ -25,7 +25,7 @@ export class CreateArticleDto {
   // subcategory fk
   @ApiProperty()
   @IsString()
-  subcategoryId: string;
+  subcategoryId: number;
 
   @ApiProperty({ type: 'boolean', default: true })
   @IsBoolean()

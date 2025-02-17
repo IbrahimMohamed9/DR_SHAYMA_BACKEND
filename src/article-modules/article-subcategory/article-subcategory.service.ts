@@ -13,6 +13,35 @@ export class ArticleSubcategoryService {
     private readonly articleCategoryService: ArticleCategoryService,
   ) {}
 
+  async checkIfSubcategoryEnExists(subcategoryEn: string) {
+    return await this.articleSubcategoryRepository.findOne({
+      where: { subcategoryEn },
+    });
+  }
+
+  async checkIfSubcategoryArExists(subcategoryAr: string) {
+    return await this.articleSubcategoryRepository.findOne({
+      where: { subcategoryAr },
+    });
+  }
+
+  async ensureSubcategoryArAndEnDoNotExist(
+    subcategoryAr: string,
+    subcategoryEn: string,
+  ) {
+    const existingSubcategoryAr =
+      await this.checkIfSubcategoryArExists(subcategoryAr);
+    const existingSubcategoryEn =
+      await this.checkIfSubcategoryEnExists(subcategoryEn);
+
+    if (existingSubcategoryAr) {
+      throw new Error('Article Arabic subcategory already exists');
+    }
+
+    if (existingSubcategoryEn) {
+      throw new Error('Article English subcategory already exists');
+    }
+  }
   async create(createArticleSubcategoryDto: CreateArticleSubcategoryDto) {
     const category = await this.articleCategoryService.findOne(
       createArticleSubcategoryDto.categoryId,
@@ -22,13 +51,10 @@ export class ArticleSubcategoryService {
       throw new Error('Category not found');
     }
 
-    const subcategory = await this.findOne(
-      createArticleSubcategoryDto.subcategoryId,
+    await this.ensureSubcategoryArAndEnDoNotExist(
+      createArticleSubcategoryDto.subcategoryAr,
+      createArticleSubcategoryDto.subcategoryEn,
     );
-
-    if (subcategory) {
-      throw new Error('Subcategory already exists');
-    }
 
     const newVolunteer = this.articleSubcategoryRepository.create(
       createArticleSubcategoryDto,
@@ -40,14 +66,20 @@ export class ArticleSubcategoryService {
     return await this.articleSubcategoryRepository.find();
   }
 
-  async findOne(id: string) {
+  async findOne(id: number) {
     return await this.articleSubcategoryRepository.findOne({
       where: { subcategoryId: id },
     });
   }
 
+  async findByCategory(category: number) {
+    return await this.articleSubcategoryRepository.find({
+      where: { categoryId: category },
+    });
+  }
+
   async update(
-    id: string,
+    id: number,
     updateArticleSubcategoryDto: UpdateArticleSubcategoryDto,
   ) {
     const existingSubcategory = await this.findOne(id);

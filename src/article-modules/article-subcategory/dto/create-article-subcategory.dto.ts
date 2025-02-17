@@ -1,12 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsNumber, IsString } from 'class-validator';
 
 export class CreateArticleSubcategoryDto {
   @ApiProperty()
   @IsString()
-  subcategoryId: string;
+  subcategoryEn: string;
 
   @ApiProperty()
   @IsString()
-  categoryId: string;
+  subcategoryAr: string;
+
+  @ApiProperty()
+  @IsNumber()
+  categoryId: number;
 }

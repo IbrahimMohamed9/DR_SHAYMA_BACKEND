@@ -1,12 +1,20 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ArticleSubcategory } from 'src/article-modules/article-subcategory/entities/article-subcategory.entity';
-import { Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class ArticleCategory {
   @ApiProperty()
-  @PrimaryColumn({ name: 'category_id' })
-  categoryId: string;
+  @PrimaryGeneratedColumn({ name: 'category_id' })
+  categoryId: number;
+
+  @ApiProperty()
+  @Column({ name: 'category_en', unique: true })
+  categoryEn: string;
+
+  @ApiProperty()
+  @Column({ name: 'category_ar', unique: true })
+  categoryAr: string;
 
   @ApiProperty({ type: () => ArticleSubcategory, isArray: true })
   @OneToMany(

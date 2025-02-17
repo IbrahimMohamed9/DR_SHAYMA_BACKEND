@@ -21,7 +21,7 @@ import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { OnlyAdminGuard } from 'src/auth/guards/only-admin.guard';
 
-@Controller('article')
+@Controller('articles')
 export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
 
@@ -58,6 +58,20 @@ export class ArticleController {
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return await this.articleService.findOne(+id);
+  }
+
+  @ApiOperation({ summary: 'Get articles by categoryId' })
+  @ApiResponse({ status: 200, type: Article })
+  @Get('category/:categoryId')
+  async findByCategory(categoryId: string) {
+    return await this.articleService.findByCategory(+categoryId);
+  }
+
+  @ApiOperation({ summary: 'Get articles by subcategoryId' })
+  @ApiResponse({ status: 200, type: Article })
+  @Get('subcategory/:subcategoryId')
+  async findBySubcategory(subcategoryId: string) {
+    return await this.articleService.findBySubcategory(+subcategoryId);
   }
 
   @ApiOperation({ summary: 'Update article by id' })

@@ -11,16 +11,41 @@ export class ArticleCategoryService {
     private articleCategoryRepository: Repository<ArticleCategory>,
   ) {}
 
-  async create(createArticleCategoryDto: CreateArticleCategoryDto) {
-    const existingCategory = await this.findOne(
-      createArticleCategoryDto.categoryId,
+  async checkIfCategoryEnExists(categoryEn: string) {
+    return await this.articleCategoryRepository.findOne({
+      where: { categoryEn },
+    });
+  }
+
+  async checkIfCategoryArExists(categoryAr: string) {
+    return await this.articleCategoryRepository.findOne({
+      where: { categoryAr },
+    });
+  }
+
+  async ensureCategoryArAndEnDoNotExist(
+    categoryAr: string,
+    categoryEn: string,
+  ) {
+    const existingCategoryAr = await this.checkIfCategoryArExists(categoryAr);
+    const existingCategoryEn = await this.checkIfCategoryEnExists(categoryEn);
+
+    if (existingCategoryAr) {
+      throw new Error('Article Arabic category already exists');
+    }
+
+    if (existingCategoryEn) {
+      throw new Error('Article English category already exists');
+    }
+  }
+
+  async create(category: CreateArticleCategoryDto) {
+    await this.ensureCategoryArAndEnDoNotExist(
+      category.categoryAr,
+      category.categoryEn,
     );
 
-    if (existingCategory) throw new Error('Article category already exists');
-
-    const newCategory = this.articleCategoryRepository.create(
-      createArticleCategoryDto,
-    );
+    const newCategory = this.articleCategoryRepository.create(category);
     return this.articleCategoryRepository.save(newCategory);
   }
 
@@ -28,30 +53,20 @@ export class ArticleCategoryService {
     return await this.articleCategoryRepository.find();
   }
 
-  async findOne(id: string) {
+  async findOne(id: number) {
     return await this.articleCategoryRepository.findOne({
       where: { categoryId: id },
     });
   }
 
-  async update(id: string, updateArticleCategoryDto: UpdateArticleCategoryDto) {
-    const existingCurrentCategory =
-      await this.articleCategoryRepository.findOne({
-        where: { categoryId: id },
-      });
+  async update(id: string, newCategory: UpdateArticleCategoryDto) {
+    await this.ensureCategoryArAndEnDoNotExist(
+      newCategory.categoryAr,
+      newCategory.categoryEn,
+    );
 
-    if (!existingCurrentCategory) throw new Error('Article category not found');
-
-    const existingNewCategory = await this.articleCategoryRepository.findOne({
-      where: { categoryId: updateArticleCategoryDto.categoryId },
-    });
-
-    if (existingNewCategory) {
-      throw new Error('Article category already exists');
-    }
-
-    await this.articleCategoryRepository.update(id, updateArticleCategoryDto);
-    return await this.findOne(updateArticleCategoryDto.categoryId);
+    await this.articleCategoryRepository.update(id, newCategory);
+    return await this.findOne(+id);
   }
 
   async remove(id: string) {

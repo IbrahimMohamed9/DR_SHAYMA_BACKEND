@@ -27,11 +27,24 @@ export class ArticleService {
   }
 
   async findAll() {
-    return await this.articleRepository.find();
+    return await this.articleRepository.find({ relations: ['subcategory'] });
   }
 
   async findOne(id: number) {
     return await this.articleRepository.findOne({ where: { id } });
+  }
+
+  async findByCategory(categoryId: number) {
+    return await this.articleRepository.find({
+      where: { subcategory: { categoryId: categoryId } },
+      relations: ['subcategory'],
+    });
+  }
+
+  async findBySubcategory(subcategoryId: number) {
+    return await this.articleRepository.find({
+      where: { subcategoryId: subcategoryId },
+    });
   }
 
   async update(id: number, updateArticleDto: UpdateArticleDto) {

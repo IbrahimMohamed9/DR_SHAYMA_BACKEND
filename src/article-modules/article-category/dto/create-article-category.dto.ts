@@ -4,5 +4,9 @@ import { IsString } from 'class-validator';
 export class CreateArticleCategoryDto {
   @ApiProperty()
   @IsString()
-  categoryId: string;
+  categoryEn: string;
+
+  @ApiProperty()
+  @IsString()
+  categoryAr: string;
 }

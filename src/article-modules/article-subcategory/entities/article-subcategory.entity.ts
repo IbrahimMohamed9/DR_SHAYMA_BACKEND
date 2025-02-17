@@ -7,18 +7,26 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity()
 export class ArticleSubcategory {
   @ApiProperty()
-  @PrimaryColumn({ name: 'subcategory_id' })
-  subcategoryId: string;
+  @PrimaryGeneratedColumn({ name: 'subcategory_id' })
+  subcategoryId: number;
+
+  @ApiProperty()
+  @Column({ name: 'subcategory_en', unique: true })
+  subcategoryEn: string;
+
+  @ApiProperty()
+  @Column({ name: 'subcategory_ar', unique: true })
+  subcategoryAr: string;
 
   @ApiProperty()
   @Column({ name: 'category_id' })
-  categoryId: string;
+  categoryId: number;
 
   @ApiProperty({ type: () => ArticleCategory })
   @ManyToOne(
