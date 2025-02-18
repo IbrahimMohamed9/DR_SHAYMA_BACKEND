@@ -10,6 +10,8 @@ import {
   UsePipes,
   ValidationPipe,
   HttpCode,
+  InternalServerErrorException,
+  BadRequestException,
 } from '@nestjs/common';
 import { FeedbackService } from './feedback.service';
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
@@ -25,10 +27,20 @@ export class FeedbackController {
 
   @ApiOperation({ summary: 'Create new feedback' })
   @ApiResponse({ status: 201, type: Feedback })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
+  @ApiResponse({ status: 500, description: 'Internal Server Error' })
   @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
   @Post()
   async create(@Body() createFeedbackDto: CreateFeedbackDto) {
-    return await this.feedbackService.create(createFeedbackDto);
+    try {
+      return await this.feedbackService.create(createFeedbackDto);
+    } catch (error) {
+      if (error.message === 'Feedback category not found') {
+        throw new BadRequestException(error.message);
+      }
+
+      throw new InternalServerErrorException('Try again later');
+    }
   }
 
   @ApiOperation({ summary: 'Create new feedback' })

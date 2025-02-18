@@ -3,15 +3,24 @@ import { CreateFeedbackDto } from './dto/create-feedback.dto';
 import { UpdateFeedbackDto } from './dto/update-feedback.dto';
 import { Repository } from 'typeorm';
 import { Feedback } from './entities/feedback.entity';
+import { FeedbackCategoryService } from '../feedback-category/feedback-category.service';
 
 @Injectable()
 export class FeedbackService {
   constructor(
     @Inject('FEEDBACK_REPOSITORY')
     private feedbackRepository: Repository<Feedback>,
+    private readonly feedbackCategoryService: FeedbackCategoryService,
   ) {}
 
   async create(createFeedbackDto: CreateFeedbackDto) {
+    const feedbackCategory = await this.feedbackCategoryService.findOne(
+      createFeedbackDto.categoryId,
+    );
+    if (!feedbackCategory) {
+      throw new Error('Feedback category not found');
+    }
+
     const newFeedback = this.feedbackRepository.create(createFeedbackDto);
     return await this.feedbackRepository.save(newFeedback);
   }

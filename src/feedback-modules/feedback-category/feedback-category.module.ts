@@ -8,5 +8,6 @@ import { DatabaseModule } from 'src/database/database.module';
   imports: [DatabaseModule],
   controllers: [FeedbackCategoryController],
   providers: [...feedbackCategoryProviders, FeedbackCategoryService],
+  exports: [FeedbackCategoryService],
 })
 export class FeedbackCategoryModule {}

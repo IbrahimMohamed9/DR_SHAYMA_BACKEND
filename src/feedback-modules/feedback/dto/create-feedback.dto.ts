@@ -1,21 +1,30 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsEmail, IsOptional, IsPhoneNumber, IsString } from 'class-validator';
 
 export class CreateFeedbackDto {
   @ApiProperty()
-  content: string;
+  @IsString()
+  message: string;
 
   @ApiProperty()
+  @IsString()
   title: string;
 
   @ApiProperty()
-  category: string;
+  @IsString()
+  categoryId: string;
 
   @ApiProperty({ required: false })
-  senderName: string;
+  @IsString()
+  name: string;
 
-  @ApiProperty({ required: false })
-  senderEmail: string;
+  @ApiProperty({ required: false, example: 'ibrahim@gmail.com' })
+  @IsOptional()
+  @IsEmail()
+  email: string;
 
-  @ApiProperty({ required: false })
-  senderPhone: string;
+  @ApiProperty({ required: false, example: '+387 60 34 12 169' })
+  @IsOptional()
+  @IsPhoneNumber(null)
+  phoneNumber: string;
 }

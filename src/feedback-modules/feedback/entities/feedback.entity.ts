@@ -16,7 +16,7 @@ export class Feedback {
 
   @ApiProperty()
   @Column()
-  content: string;
+  message: string;
 
   @ApiProperty()
   @Column()
@@ -24,15 +24,15 @@ export class Feedback {
 
   @ApiProperty({ required: false })
   @Column({ name: 'sender_name', nullable: true })
-  senderName: string;
+  name: string;
 
   @ApiProperty({ required: false })
   @Column({ name: 'sender_email', nullable: true })
-  senderEmail: string;
+  email: string;
 
   @ApiProperty({ required: false })
   @Column({ name: 'sender_phone', nullable: true })
-  senderPhone: string;
+  phoneNumber: string;
 
   @ApiProperty()
   @Column({ name: 'category_id' })
