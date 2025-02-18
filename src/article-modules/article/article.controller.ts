@@ -62,16 +62,44 @@ export class ArticleController {
 
   @ApiOperation({ summary: 'Get articles by categoryId' })
   @ApiResponse({ status: 200, type: Article })
-  @Get('category/:categoryId')
-  async findByCategory(categoryId: string) {
-    return await this.articleService.findByCategory(+categoryId);
+  @Get('category/id/:categoryId')
+  async findByCategory(@Param('categoryId') categoryId: string) {
+    return await this.articleService.findByCategoryId(+categoryId);
+  }
+
+  @ApiOperation({ summary: 'Get articles by categoryEn' })
+  @ApiResponse({ status: 200, type: Article })
+  @Get('category/en/:categoryEn')
+  async findByCategoryEn(@Param('categoryEn') categoryEn: string) {
+    return await this.articleService.findByCategoryEn(categoryEn);
+  }
+
+  @ApiOperation({ summary: 'Get articles by categoryAr' })
+  @ApiResponse({ status: 200, type: Article })
+  @Get('category/ar/:categoryAr')
+  async findByCategoryAr(@Param('categoryAr') categoryAr: string) {
+    return await this.articleService.findByCategoryAr(categoryAr);
   }
 
   @ApiOperation({ summary: 'Get articles by subcategoryId' })
   @ApiResponse({ status: 200, type: Article })
-  @Get('subcategory/:subcategoryId')
-  async findBySubcategory(subcategoryId: string) {
-    return await this.articleService.findBySubcategory(+subcategoryId);
+  @Get('subcategory/id/:subcategoryId')
+  async findBySubcategory(@Param('subcategoryId') subcategoryId: string) {
+    return await this.articleService.findBySubcategoryId(+subcategoryId);
+  }
+
+  @ApiOperation({ summary: 'Get articles by subcategoryEn' })
+  @ApiResponse({ status: 200, type: Article })
+  @Get('subcategory/en/:subcategoryEn')
+  async findBySubcategoryEn(@Param('subcategoryEn') subcategoryEn: string) {
+    return await this.articleService.findBySubcategoryEn(subcategoryEn);
+  }
+
+  @ApiOperation({ summary: 'Get articles by subcategoryEn' })
+  @ApiResponse({ status: 200, type: Article })
+  @Get('subcategory/ar/:subcategoryAr')
+  async findBySubcategoryAr(@Param('subcategoryAr') subcategoryAr: string) {
+    return await this.articleService.findBySubcategoryAr(subcategoryAr);
   }
 
   @ApiOperation({ summary: 'Update article by id' })
