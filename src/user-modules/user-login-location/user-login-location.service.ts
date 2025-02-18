@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateUserLoginLocationDto } from './dto/create-user-login-location.dto';
-import { UpdateUserLoginLocationDto } from './dto/update-user-login-location.dto';
 import { Repository } from 'typeorm';
 import { UserLoginLocation } from './entities/user-login-location.entity';
 
@@ -18,6 +17,7 @@ export class UserLoginLocationService {
   async findAll() {
     return await this.uLLRepository.find();
   }
+
   async findAllWithUser() {
     return await this.uLLRepository.find({
       relations: ['user'],
@@ -25,25 +25,31 @@ export class UserLoginLocationService {
   }
 
   async findOne(id: number) {
-    return await this.uLLRepository.find({ where: { id } });
+    const result = await this.uLLRepository.findOne({ where: { id } });
+    if (!result) throw new Error('User login location not found');
+    return result;
   }
 
   async findOneWithUser(id: number) {
-    return await this.uLLRepository.find({
+    const result = await this.uLLRepository.findOne({
       where: { id },
       relations: ['user'],
     });
+
+    if (!result) throw new Error('User login location not found');
+    return result;
   }
 
-  async update(
-    id: number,
-    updateUserLoginLocationDto: UpdateUserLoginLocationDto,
-  ) {
-    await this.uLLRepository.update(id, updateUserLoginLocationDto);
-    return this.findOne(id);
+  async findAllLoginLocationByUserId(userId: number) {
+    return await this.uLLRepository.find({
+      where: { userId },
+    });
   }
 
-  async remove(id: number) {
-    await this.uLLRepository.delete(id);
+  async findAllLoginLocationByUserIdWithUser(userId: number) {
+    return await this.uLLRepository.find({
+      where: { userId },
+      relations: ['user'],
+    });
   }
 }

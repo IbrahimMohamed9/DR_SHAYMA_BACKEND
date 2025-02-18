@@ -62,7 +62,7 @@ export class Article {
 
   @ApiProperty()
   @Column({ name: 'subcategory_id' })
-  subcategoryId: string;
+  subcategoryId: number;
 
   @ApiProperty({ type: () => User, isArray: true })
   @ManyToMany(() => User, (user) => user.reviewedArticles)

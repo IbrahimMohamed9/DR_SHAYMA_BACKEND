@@ -4,6 +4,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { CreateUserDto } from 'src/user-modules/user/dto/create-user.dto';
 import { JwtService } from '@nestjs/jwt';
+import { hash } from 'crypto';
 
 @Injectable()
 export class AuthService {
@@ -14,10 +15,15 @@ export class AuthService {
   ) {}
 
   async login(loginDto: LoginDto, ip: string) {
-    const { email, password } = loginDto;
+    const { email } = loginDto;
+    const errorMsg = 'Invalid Email or Password';
+
     const user = await this.userService.findByEmail(email);
-    if (!user || user.password !== password)
-      throw new UnauthorizedException('Invalid credentials');
+    if (!user) throw new UnauthorizedException(errorMsg);
+
+    const password = hash('sha256', loginDto.password);
+
+    if (user.password !== password) throw new UnauthorizedException(errorMsg);
 
     this.userLoginLocationService.create({
       ipAddress: ip,

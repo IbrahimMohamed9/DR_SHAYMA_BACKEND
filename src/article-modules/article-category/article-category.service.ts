@@ -11,26 +11,72 @@ export class ArticleCategoryService {
     private articleCategoryRepository: Repository<ArticleCategory>,
   ) {}
 
-  async create(createArticleCategoryDto: CreateArticleCategoryDto) {
-    const newVolunteer = this.articleCategoryRepository.create(
-      createArticleCategoryDto,
+  async ensureCategoryArAndEnDoNotExist(
+    categoryAr: string,
+    categoryEn: string,
+  ) {
+    const existingCategoryAr = await this.findOneByCategoryAr(categoryAr);
+    const existingCategoryEn = await this.findOneByCategoryEn(categoryEn);
+
+    if (existingCategoryAr) {
+      throw new Error('Article Arabic category already exists');
+    }
+
+    if (existingCategoryEn) {
+      throw new Error('Article English category already exists');
+    }
+  }
+
+  async create(category: CreateArticleCategoryDto) {
+    await this.ensureCategoryArAndEnDoNotExist(
+      category.categoryAr,
+      category.categoryEn,
     );
-    return await this.articleCategoryRepository.save(newVolunteer);
+
+    const newCategory = this.articleCategoryRepository.create(category);
+    return this.articleCategoryRepository.save(newCategory);
   }
 
   async findAll() {
     return await this.articleCategoryRepository.find();
   }
 
-  async findOne(id: string) {
+  async findOne(id: number) {
     return await this.articleCategoryRepository.findOne({
       where: { categoryId: id },
     });
   }
 
-  async update(id: string, updateArticleCategoryDto: UpdateArticleCategoryDto) {
-    await this.articleCategoryRepository.update(id, updateArticleCategoryDto);
-    return await this.findOne(id);
+  async findOneByCategoryEn(categoryEn: string) {
+    return await this.articleCategoryRepository.findOne({
+      where: { categoryEn },
+    });
+  }
+
+  async findOneByCategoryAr(categoryAr: string) {
+    return await this.articleCategoryRepository.findOne({
+      where: { categoryAr },
+    });
+  }
+
+  async update(id: string, newCategory: UpdateArticleCategoryDto) {
+    const newCategoryAr = newCategory.categoryAr;
+    const newCategoryEn = newCategory.categoryEn;
+    if (newCategory.categoryAr && newCategory.categoryEn) {
+      await this.ensureCategoryArAndEnDoNotExist(
+        newCategoryAr,
+        newCategoryEn,
+      );
+    }
+    if (newCategory.categoryAr) {
+      await this.ensureCategoryArAndEnDoNotExist(newCategory.categoryAr, '');
+    }
+    if (newCategory.categoryEn) {
+      await this.ensureCategoryArAndEnDoNotExist('', newCategory.categoryEn);
+    }
+
+    await this.articleCategoryRepository.update(id, newCategory);
+    return await this.findOne(+id);
   }
 
   async remove(id: string) {

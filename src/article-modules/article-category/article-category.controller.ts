@@ -6,10 +6,20 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  UsePipes,
+  ValidationPipe,
+  HttpCode,
+  BadRequestException,
+  NotFoundException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { ArticleCategoryService } from './article-category.service';
 import { CreateArticleCategoryDto } from './dto/create-article-category.dto';
 import { UpdateArticleCategoryDto } from './dto/update-article-category.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { OnlyAdminGuard } from 'src/auth/guards/only-admin.guard';
 
 @Controller('article-category')
 export class ArticleCategoryController {
@@ -17,31 +27,100 @@ export class ArticleCategoryController {
     private readonly articleCategoryService: ArticleCategoryService,
   ) {}
 
+  @ApiOperation({ summary: 'Create new article category' })
+  @ApiResponse({ status: 201, type: CreateArticleCategoryDto })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiBearerAuth()
+  @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
+  @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @Post()
-  create(@Body() createArticleCategoryDto: CreateArticleCategoryDto) {
-    return this.articleCategoryService.create(createArticleCategoryDto);
+  async create(@Body() createArticleCategoryDto: CreateArticleCategoryDto) {
+    try {
+      return await this.articleCategoryService.create(createArticleCategoryDto);
+    } catch (e) {
+      const isBadRequest = [
+        'Article Arabic category already exists',
+        'Article English category already exists',
+      ].includes(e.message);
+
+      if (isBadRequest) {
+        throw new BadRequestException(e.message);
+      }
+      throw new InternalServerErrorException('An unexpected error occurred');
+    }
   }
 
   @Get()
-  findAll() {
-    return this.articleCategoryService.findAll();
+  @ApiOperation({ summary: 'Get all article category' })
+  @ApiResponse({ status: 200, type: [CreateArticleCategoryDto] })
+  async findAll() {
+    return await this.articleCategoryService.findAll();
   }
 
+  @ApiOperation({ summary: 'Get article category by id' })
+  @ApiResponse({ status: 200, type: CreateArticleCategoryDto })
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.articleCategoryService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    return await this.articleCategoryService.findOne(+id);
   }
 
+  @ApiOperation({ summary: 'Get article category by categoryEn' })
+  @ApiResponse({ status: 200, type: CreateArticleCategoryDto })
+  @Get('categoryEn/:categoryEn')
+  async findOneByCategoryEn(@Param('categoryEn') categoryEn: string) {
+    return await this.articleCategoryService.findOneByCategoryEn(categoryEn);
+  }
+
+  @ApiOperation({ summary: 'Get article category by categoryAr' })
+  @ApiResponse({ status: 200, type: CreateArticleCategoryDto })
+  @Get('categoryAr/:categoryAr')
+  async findOneByCategoryAr(@Param('categoryAr') categoryAr: string) {
+    return await this.articleCategoryService.findOneByCategoryAr(categoryAr);
+  }
+
+  @ApiOperation({ summary: 'Update article category by id' })
+  @ApiResponse({ status: 200, type: UpdateArticleCategoryDto })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Not Found' })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateArticleCategoryDto: UpdateArticleCategoryDto,
   ) {
-    return this.articleCategoryService.update(id, updateArticleCategoryDto);
+    try {
+      return await this.articleCategoryService.update(
+        id,
+        updateArticleCategoryDto,
+      );
+    } catch (e) {
+      const badRequest = [
+        'Article Arabic category already exists',
+        'Article English category already exists',
+      ];
+      if (badRequest.includes(e.message)) {
+        throw new BadRequestException(e.message);
+      } else if (e.message === 'Article category not found') {
+        throw new NotFoundException(e.message);
+      }
+      throw new InternalServerErrorException('An unexpected error occurred');
+    }
   }
 
+  @ApiOperation({ summary: 'Delete article by id' })
+  @ApiResponse({ status: 204, description: 'Deleted successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'), OnlyAdminGuard)
+  @HttpCode(204)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.articleCategoryService.remove(id);
+  async remove(@Param('id') id: string) {
+    return await this.articleCategoryService.remove(id);
   }
 }
