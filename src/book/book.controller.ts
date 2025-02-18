@@ -19,7 +19,7 @@ import { Book } from './entities/book.entity';
 import { OnlyAdminGuard } from 'src/auth/guards/only-admin.guard';
 import { AuthGuard } from '@nestjs/passport';
 
-@Controller('book')
+@Controller('books')
 export class BookController {
   constructor(private readonly bookService: BookService) {}
 
