@@ -66,6 +66,20 @@ export class ArticleCategoryController {
     return await this.articleCategoryService.findOne(+id);
   }
 
+  @ApiOperation({ summary: 'Get article category by categoryEn' })
+  @ApiResponse({ status: 200, type: CreateArticleCategoryDto })
+  @Get('categoryEn/:categoryEn')
+  async findOneByCategoryEn(@Param('categoryEn') categoryEn: string) {
+    return await this.articleCategoryService.findOneByCategoryEn(categoryEn);
+  }
+
+  @ApiOperation({ summary: 'Get article category by categoryAr' })
+  @ApiResponse({ status: 200, type: CreateArticleCategoryDto })
+  @Get('categoryAr/:categoryAr')
+  async findOneByCategoryAr(@Param('categoryAr') categoryAr: string) {
+    return await this.articleCategoryService.findOneByCategoryAr(categoryAr);
+  }
+
   @ApiOperation({ summary: 'Update article category by id' })
   @ApiResponse({ status: 200, type: UpdateArticleCategoryDto })
   @ApiResponse({ status: 400, description: 'Bad Request' })
@@ -85,10 +99,14 @@ export class ArticleCategoryController {
         updateArticleCategoryDto,
       );
     } catch (e) {
-      if (e.message === 'Article category already exists') {
-        throw new BadRequestException('Article category already exists');
+      const badRequest = [
+        'Article Arabic category already exists',
+        'Article English category already exists',
+      ];
+      if (badRequest.includes(e.message)) {
+        throw new BadRequestException(e.message);
       } else if (e.message === 'Article category not found') {
-        throw new NotFoundException('Article category not found');
+        throw new NotFoundException(e.message);
       }
       throw new InternalServerErrorException('An unexpected error occurred');
     }

@@ -11,24 +11,12 @@ export class ArticleCategoryService {
     private articleCategoryRepository: Repository<ArticleCategory>,
   ) {}
 
-  async checkIfCategoryEnExists(categoryEn: string) {
-    return await this.articleCategoryRepository.findOne({
-      where: { categoryEn },
-    });
-  }
-
-  async checkIfCategoryArExists(categoryAr: string) {
-    return await this.articleCategoryRepository.findOne({
-      where: { categoryAr },
-    });
-  }
-
   async ensureCategoryArAndEnDoNotExist(
     categoryAr: string,
     categoryEn: string,
   ) {
-    const existingCategoryAr = await this.checkIfCategoryArExists(categoryAr);
-    const existingCategoryEn = await this.checkIfCategoryEnExists(categoryEn);
+    const existingCategoryAr = await this.findOneByCategoryAr(categoryAr);
+    const existingCategoryEn = await this.findOneByCategoryEn(categoryEn);
 
     if (existingCategoryAr) {
       throw new Error('Article Arabic category already exists');
@@ -59,11 +47,33 @@ export class ArticleCategoryService {
     });
   }
 
+  async findOneByCategoryEn(categoryEn: string) {
+    return await this.articleCategoryRepository.findOne({
+      where: { categoryEn },
+    });
+  }
+
+  async findOneByCategoryAr(categoryAr: string) {
+    return await this.articleCategoryRepository.findOne({
+      where: { categoryAr },
+    });
+  }
+
   async update(id: string, newCategory: UpdateArticleCategoryDto) {
-    await this.ensureCategoryArAndEnDoNotExist(
-      newCategory.categoryAr,
-      newCategory.categoryEn,
-    );
+    const newCategoryAr = newCategory.categoryAr;
+    const newCategoryEn = newCategory.categoryEn;
+    if (newCategory.categoryAr && newCategory.categoryEn) {
+      await this.ensureCategoryArAndEnDoNotExist(
+        newCategoryAr,
+        newCategoryEn,
+      );
+    }
+    if (newCategory.categoryAr) {
+      await this.ensureCategoryArAndEnDoNotExist(newCategory.categoryAr, '');
+    }
+    if (newCategory.categoryEn) {
+      await this.ensureCategoryArAndEnDoNotExist('', newCategory.categoryEn);
+    }
 
     await this.articleCategoryRepository.update(id, newCategory);
     return await this.findOne(+id);
