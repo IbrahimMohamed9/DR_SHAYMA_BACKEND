@@ -46,10 +46,13 @@ export class ArticleSubcategoryController {
         createArticleSubcategoryDto,
       );
     } catch (error) {
-      if (error.message === 'Category not found') {
-        throw new BadRequestException('Category not found');
-      } else if (error.message === 'Subcategory already exists') {
-        throw new BadRequestException('Subcategory already exists');
+      const badRequest = [
+        'Category not found',
+        'Article Arabic subcategory already exists',
+        'Article English subcategory already exists',
+      ];
+      if (badRequest.includes(error.message)) {
+        throw new BadRequestException(error.message);
       }
 
       throw new InternalServerErrorException('An unexpected error occurred');
@@ -70,11 +73,43 @@ export class ArticleSubcategoryController {
     return await this.articleSubcategoryService.findOne(+id);
   }
 
-  @ApiOperation({ summary: 'get article subcategory by categoryId' })
+  @ApiOperation({ summary: 'Get article subcategories by subcategoryEn' })
   @ApiResponse({ status: 200, type: ArticleSubcategory })
-  @Get('category/:categoryId')
+  @Get('en/:subcategoryEn')
+  async findOneBySubcategoryEn(@Param('subcategoryEn') subcategoryEn: string) {
+    return await this.articleSubcategoryService.findOneBySubcategoryEn(
+      subcategoryEn,
+    );
+  }
+
+  @ApiOperation({ summary: 'Get article subcategory by subcategoryAr' })
+  @ApiResponse({ status: 200, type: ArticleSubcategory })
+  @Get('ar/:subcategoryAr')
+  async findOneBySubcategoryAr(@Param('subcategoryAr') subcategoryAr: string) {
+    return await this.articleSubcategoryService.findOneBySubcategoryAr(
+      subcategoryAr,
+    );
+  }
+
+  @ApiOperation({ summary: 'get article subcategories by categoryId' })
+  @ApiResponse({ status: 200, type: ArticleSubcategory })
+  @Get('category/id/:categoryId')
   async findByCategory(@Param('categoryId') categoryId: string) {
     return await this.articleSubcategoryService.findByCategory(+categoryId);
+  }
+
+  @ApiOperation({ summary: 'Get article subcategories by categoryEn' })
+  @ApiResponse({ status: 200, type: ArticleSubcategory })
+  @Get('category/en/:categoryEn')
+  async findByCategoryEn(@Param('categoryEn') categoryEn: string) {
+    return await this.articleSubcategoryService.findByCategoryEn(categoryEn);
+  }
+
+  @ApiOperation({ summary: 'Get article subcategory by subcategoryAr' })
+  @ApiResponse({ status: 200, type: ArticleSubcategory })
+  @Get('category/ar/:categoryAr')
+  async findByCategoryAr(@Param('categoryAr') categoryAr: string) {
+    return await this.articleSubcategoryService.findByCategoryAr(categoryAr);
   }
 
   @ApiOperation({ summary: 'Update article subcategory by id' })

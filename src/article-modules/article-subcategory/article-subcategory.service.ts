@@ -13,26 +13,14 @@ export class ArticleSubcategoryService {
     private readonly articleCategoryService: ArticleCategoryService,
   ) {}
 
-  async checkIfSubcategoryEnExists(subcategoryEn: string) {
-    return await this.articleSubcategoryRepository.findOne({
-      where: { subcategoryEn },
-    });
-  }
-
-  async checkIfSubcategoryArExists(subcategoryAr: string) {
-    return await this.articleSubcategoryRepository.findOne({
-      where: { subcategoryAr },
-    });
-  }
-
   async ensureSubcategoryArAndEnDoNotExist(
     subcategoryAr: string,
     subcategoryEn: string,
   ) {
     const existingSubcategoryAr =
-      await this.checkIfSubcategoryArExists(subcategoryAr);
+      await this.findOneBySubcategoryAr(subcategoryAr);
     const existingSubcategoryEn =
-      await this.checkIfSubcategoryEnExists(subcategoryEn);
+      await this.findOneBySubcategoryEn(subcategoryEn);
 
     if (existingSubcategoryAr) {
       throw new Error('Article Arabic subcategory already exists');
@@ -72,9 +60,35 @@ export class ArticleSubcategoryService {
     });
   }
 
-  async findByCategory(category: number) {
+  async findOneBySubcategoryEn(subcategoryEn: string) {
+    return await this.articleSubcategoryRepository.findOne({
+      where: { subcategoryEn },
+    });
+  }
+
+  async findOneBySubcategoryAr(subcategoryAr: string) {
+    return await this.articleSubcategoryRepository.findOne({
+      where: { subcategoryAr },
+    });
+  }
+
+  async findByCategory(categoryId: number) {
     return await this.articleSubcategoryRepository.find({
-      where: { categoryId: category },
+      where: { categoryId },
+    });
+  }
+
+  async findByCategoryEn(categoryEn: string) {
+    return await this.articleSubcategoryRepository.find({
+      where: { category: { categoryEn } },
+      relations: ['category'],
+    });
+  }
+
+  async findByCategoryAr(categoryAr: string) {
+    return await this.articleSubcategoryRepository.find({
+      where: { category: { categoryAr } },
+      relations: ['category'],
     });
   }
 
