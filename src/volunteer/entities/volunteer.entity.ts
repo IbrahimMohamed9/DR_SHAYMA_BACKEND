@@ -13,6 +13,10 @@ export class Volunteer {
 
   @ApiProperty()
   @Column()
+  position: string;
+
+  @ApiProperty()
+  @Column()
   phone: string;
 
   @ApiProperty()

@@ -10,6 +10,10 @@ export class CreateVolunteerDto {
   @IsUrl()
   img?: string;
 
+  @ApiProperty()
+  @IsString()
+  position: string;
+
   @ApiProperty({ example: '+201110472777' })
   @IsPhoneNumber(null)
   phone: string;
