@@ -23,7 +23,7 @@ import { ArticleSubcategory } from './entities/article-subcategory.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { OnlyAdminGuard } from 'src/auth/guards/only-admin.guard';
 
-@Controller('article-subcategory')
+@Controller('article-subcategories')
 export class ArticleSubcategoryController {
   constructor(
     private readonly articleSubcategoryService: ArticleSubcategoryService,

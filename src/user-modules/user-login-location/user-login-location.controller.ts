@@ -13,7 +13,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { OnlyAdminGuard } from 'src/auth/guards/only-admin.guard';
 import { CreateUserLoginLocationDto } from './dto/create-user-login-location.dto';
 
-@Controller('user-login-location')
+@Controller('user-login-locations')
 export class UserLoginLocationController {
   constructor(
     private readonly userLoginLocationService: UserLoginLocationService,

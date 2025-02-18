@@ -19,7 +19,7 @@ import { OnlyAdminGuard } from 'src/auth/guards/only-admin.guard';
 import { AuthGuard } from '@nestjs/passport';
 import { MeAndAdminGuard } from 'src/auth/guards/me-and-admin.guard';
 
-@Controller('user')
+@Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 

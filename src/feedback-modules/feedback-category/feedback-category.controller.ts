@@ -17,7 +17,7 @@ import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { OnlyAdminGuard } from 'src/auth/guards/only-admin.guard';
 
-@Controller('feedback-category')
+@Controller('feedback-categories')
 export class FeedbackCategoryController {
   constructor(
     private readonly feedbackCategoryService: FeedbackCategoryService,

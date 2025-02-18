@@ -17,7 +17,7 @@ import { MeAndAdminGuard } from 'src/auth/guards/me-and-admin.guard';
 import { OnlyAdminGuard } from 'src/auth/guards/only-admin.guard';
 import { OptionalJwtUser } from 'src/auth/decorators/optional-jwt-user.decorator';
 
-@Controller('user-activity')
+@Controller('user-activities')
 export class UserActivityController {
   constructor(private readonly userActivityService: UserActivityService) {}
 

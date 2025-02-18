@@ -21,7 +21,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { OnlyAdminGuard } from 'src/auth/guards/only-admin.guard';
 
-@Controller('article-category')
+@Controller('article-categories')
 export class ArticleCategoryController {
   constructor(
     private readonly articleCategoryService: ArticleCategoryService,
