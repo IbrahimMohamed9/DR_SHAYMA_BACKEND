@@ -27,51 +27,57 @@ export class ArticleService {
   }
 
   async findAll() {
-    return await this.articleRepository.find({ relations: ['subcategory'] });
+    return await this.articleRepository.find({
+      relations: ['subcategory.category'],
+    });
   }
 
   async findOne(id: number) {
-    return await this.articleRepository.findOne({ where: { id } });
+    return await this.articleRepository.findOne({
+      where: { id },
+      relations: ['subcategory.category'],
+    });
   }
 
   async findByCategoryId(categoryId: number) {
     return await this.articleRepository.find({
       where: { subcategory: { categoryId } },
-      relations: ['subcategory'],
+      relations: ['subcategory.category'],
     });
   }
 
   async findBySubcategoryId(subcategoryId: number) {
     return await this.articleRepository.find({
       where: { subcategoryId },
+      relations: ['subcategory.category'],
     });
   }
 
   async findBySubcategoryEn(subcategoryEn: string) {
     return await this.articleRepository.find({
       where: { subcategory: { subcategoryEn } },
-      relations: ['subcategory'],
+      relations: ['subcategory.category'],
     });
   }
 
   async findBySubcategoryAr(subcategoryAr: string) {
     return await this.articleRepository.find({
       where: { subcategory: { subcategoryAr } },
-      relations: ['subcategory'],
+      relations: ['subcategory.category'],
     });
   }
 
   async findByCategoryEn(categoryEn: string) {
     return await this.articleRepository.find({
       where: { subcategory: { category: { categoryEn } } },
-      relations: ['subcategory', 'subcategory.category'],
+      relations: ['subcategory.category'],
     });
   }
 
   async findByCategoryAr(categoryAr: string) {
     return await this.articleRepository.find({
       where: { subcategory: { category: { categoryAr } } },
-      relations: ['subcategory', 'subcategory.category'],
+      relations: ['subcategory.category'],
     });
   }
 
